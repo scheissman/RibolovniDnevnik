@@ -12,6 +12,9 @@ namespace Backend.Data
         
         
         }
-        public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<Korisnik> korisnici { get; set; }
+        public DbSet<Riba> ribe { get; set; }
+
+       
     }
 }
