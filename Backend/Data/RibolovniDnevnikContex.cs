@@ -14,7 +14,20 @@ namespace Backend.Data
         }
         public DbSet<Korisnik> korisnici { get; set; }
         public DbSet<Riba> ribe { get; set; }
+        public DbSet<Unos>  unos { get; set; }  
+        public DbSet <Ulov> ulov { get; set; }
 
-       
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Ulov>().HasOne(u=> u.Riba);
+            modelBuilder.Entity<Ulov>().HasOne(u => u.Unos);
+
+
+            modelBuilder.Entity<Unos>().HasOne(u => u.Korisnik);
+
+        }
+
+
     }
 }
