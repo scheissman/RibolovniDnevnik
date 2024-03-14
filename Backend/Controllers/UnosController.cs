@@ -16,13 +16,13 @@ namespace Backend.Controllers
 
     public IActionResult Get()
     {
-        return new JsonResult(_contex.unos.ToList());
+        return new JsonResult(_contex.Unosi.ToList());
     }
 
     [HttpPost]
     public IActionResult Post(Unos  unos)
     {
-        _contex.unos.Add(unos);
+        _contex.Unosi.Add(unos);
         _contex.SaveChanges();
 
 
@@ -35,9 +35,9 @@ namespace Backend.Controllers
 
     public IActionResult Delete(int id)
     {
-        var SmjerIzBaze = _contex.unos.Find(id);
+        var UnosIzBaze = _contex.Unosi.Find(id);
 
-        _contex.unos.Remove(SmjerIzBaze);
+        _contex.Unosi.Remove(UnosIzBaze);
         _contex.SaveChanges();
         return new JsonResult(new { poruka = "obrisano" });
 
@@ -49,18 +49,18 @@ namespace Backend.Controllers
 
     public IActionResult Put(int id, Unos unos)
     {
-        var SmjerIzBaze = _contex.unos.Find(id);
-        SmjerIzBaze.Korisnik = unos.Korisnik;
-        SmjerIzBaze.Vodostaj = unos.Vodostaj;
-        SmjerIzBaze.Datum = unos.Datum;
-        SmjerIzBaze.Biljeska = unos.Biljeska;
+        var UnosIzBaze = _contex.Unosi.Find(id);
+            UnosIzBaze.Korisnik = unos.Korisnik;
+        UnosIzBaze.Vodostaj = unos.Vodostaj;
+        UnosIzBaze.Datum = unos.Datum;
+        UnosIzBaze.Biljeska = unos.Biljeska;
 
 
-        _contex.unos.Update(SmjerIzBaze);
+        _contex.Unosi.Update(UnosIzBaze);
         _contex.SaveChanges();
 
 
-        return new JsonResult(SmjerIzBaze);
+        return new JsonResult(UnosIzBaze);
     }
 
 

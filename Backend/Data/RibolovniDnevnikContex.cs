@@ -12,10 +12,10 @@ namespace Backend.Data
         
         
         }
-        public DbSet<Korisnik> korisnici { get; set; }
-        public DbSet<Riba> ribe { get; set; }
-        public DbSet<Unos>  unos { get; set; }  
-        public DbSet <Ulov> ulov { get; set; }
+        public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<Riba> Ribe { get; set; }
+        public DbSet<Unos>  Unosi { get; set; }  
+        public DbSet <Ulov> Ulovi { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -19,13 +19,13 @@ namespace Backend.Controllers
 
         public IActionResult Get()
         {
-            return new JsonResult(_contex.ulov.ToList());
+            return new JsonResult(_contex.Ulovi.ToList());
         }
 
         [HttpPost]
         public IActionResult Post(Ulov ulov)
         {
-            _contex.ulov.Add(ulov);
+            _contex.Ulovi.Add(ulov);
             _contex.SaveChanges();
 
 
@@ -38,9 +38,9 @@ namespace Backend.Controllers
 
         public IActionResult Delete(int id)
         {
-            var SmjerIzBaze = _contex.ulov.Find(id);
+            var UloviIzBaze = _contex.Ulovi.Find(id);
 
-            _contex.ulov.Remove(SmjerIzBaze);
+            _contex.Ulovi.Remove(UloviIzBaze);
             _contex.SaveChanges();
             return new JsonResult(new { poruka = "obrisano" });
 
@@ -52,19 +52,19 @@ namespace Backend.Controllers
 
         public IActionResult Put(int id, Ulov ulov)
         {
-            var SmjerIzBaze = _contex.ulov.Find(id);
-            SmjerIzBaze.Kolicina = ulov.Kolicina;
-            SmjerIzBaze.Riba = ulov.Riba;
-            SmjerIzBaze.Tezina = ulov.Tezina;
-            SmjerIzBaze.Duzina = ulov.Duzina;
-            SmjerIzBaze.Unos = ulov.Unos;
+            var UloviIzBaze = _contex.Ulovi.Find(id);
+            UloviIzBaze.Kolicina = ulov.Kolicina;
+            UloviIzBaze.Riba = ulov.Riba;
+            UloviIzBaze.Tezina = ulov.Tezina;
+            UloviIzBaze.Duzina = ulov.Duzina;
+            UloviIzBaze.Unos = ulov.Unos;
 
 
-            _contex.ulov.Update(SmjerIzBaze);
+            _contex.Ulovi.Update(UloviIzBaze);
             _contex.SaveChanges();
 
 
-            return new JsonResult(SmjerIzBaze);
+            return new JsonResult(UloviIzBaze);
         }
 
 

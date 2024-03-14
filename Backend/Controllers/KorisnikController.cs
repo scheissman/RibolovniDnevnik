@@ -23,13 +23,13 @@ namespace Backend.Controllers
 
         public IActionResult Get()
         {
-            return new JsonResult(_contex.korisnici.ToList());
+            return new JsonResult(_contex.Korisnici.ToList());
         }
 
         [HttpPost]
         public IActionResult Post(Korisnik korisnik)
         {
-            _contex.korisnici.Add(korisnik);
+            _contex.Korisnici.Add(korisnik);
             _contex.SaveChanges();
 
 
@@ -42,9 +42,9 @@ namespace Backend.Controllers
 
         public IActionResult Delete(int id)
         {
-            var SmjerIzBaze = _contex.korisnici.Find(id);
+            var KorisniciIzBaze = _contex.Korisnici.Find(id);
 
-            _contex.korisnici.Remove(SmjerIzBaze);
+            _contex.Korisnici.Remove(KorisniciIzBaze);
             _contex.SaveChanges();
             return new JsonResult(new  { poruka = "obrisano" });
 
@@ -56,16 +56,16 @@ namespace Backend.Controllers
 
         public IActionResult Put(int id ,  Korisnik korisnik)
         {
-            var SmjerIzBaze = _contex.korisnici.Find(id);
-            SmjerIzBaze.Ime = korisnik.Ime;
-            SmjerIzBaze.Prezime = korisnik.Prezime;
-            SmjerIzBaze.Email = korisnik.Email;
+            var KorisniciIzBaze = _contex.Korisnici.Find(id);
+            KorisniciIzBaze.Ime = korisnik.Ime;
+            KorisniciIzBaze.Prezime = korisnik.Prezime;
+            KorisniciIzBaze.Email = korisnik.Email;
 
-            _contex.korisnici.Update(SmjerIzBaze);
+            _contex.Korisnici.Update(KorisniciIzBaze);
             _contex.SaveChanges();
 
 
-            return new JsonResult(SmjerIzBaze);
+            return new JsonResult(KorisniciIzBaze);
         }
 
 

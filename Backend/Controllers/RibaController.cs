@@ -26,13 +26,13 @@ namespace Backend.Controllers
 
         public IActionResult Get()
         {
-            return new JsonResult(_contex.ribe.ToList());
+            return new JsonResult(_contex.Ribe.ToList());
         }
 
         [HttpPost]
         public IActionResult Post(Riba riba)
         {
-            _contex.ribe.Add(riba);
+            _contex.Ribe.Add(riba);
             _contex.SaveChanges();
 
 
@@ -45,9 +45,9 @@ namespace Backend.Controllers
 
         public IActionResult Delete(int id)
         {
-            var SmjerIzBaze = _contex.ribe.Find(id);
+            var RibeIzBaze = _contex.Ribe.Find(id);
 
-            _contex.ribe.Remove(SmjerIzBaze);
+            _contex.Ribe.Remove(RibeIzBaze);
             _contex.SaveChanges();
             return new JsonResult(new  { poruka = "obrisano" });
 
@@ -59,15 +59,15 @@ namespace Backend.Controllers
 
         public IActionResult Put(int id ,  Riba riba)
         {
-            var SmjerIzBaze = _contex.ribe.Find(id);
-            SmjerIzBaze.Vrsta = riba.Vrsta;
+            var RibeIzBaze = _contex.Ribe.Find(id);
+            RibeIzBaze.Vrsta = riba.Vrsta;
             
 
-            _contex.ribe.Update(SmjerIzBaze);
+            _contex.Ribe.Update(RibeIzBaze);
             _contex.SaveChanges();
 
 
-            return new JsonResult(SmjerIzBaze);
+            return new JsonResult(RibeIzBaze);
         }
 
 
