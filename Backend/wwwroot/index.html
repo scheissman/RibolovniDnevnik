@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RibolovniDnevnik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .api-link {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        .api-link:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
 
-    <a href="/swagger/index.html">API</a>
+    <h1>Welcome to RibolovniDnevnik!</h1>
+    <p>Keep track of your fishing adventures with ease.</p>
+
+    <a class="api-link" href="/swagger/index.html">Dive into the Fishy API</a>
 
 </body>
 </html>

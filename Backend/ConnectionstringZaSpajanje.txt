@@ -1,3 +1,0 @@
- "ConnectionStrings": {
-    "RibolovniDnevnikContext": "Server = localhost; Database = ribolovnidnevnik;Trusted_Connection = false; TrustServerCertificate = True;User Id=sa;Password=Zekonja12$;"
-    "RibolovniDnevnikContext": "Server =DESKTOP-B0IFIFV; Database = ribolovnidnevnik;Trusted_Connection = true; TrustServerCertificate = True"
