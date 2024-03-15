@@ -8,7 +8,7 @@ namespace Backend.Controllers
 
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UnosController
+    public class UnosController : ControllerBase
     {
     private readonly RibolovniDnevnikContex _contex;
     public UnosController(RibolovniDnevnikContex contex) { _contex = contex; }

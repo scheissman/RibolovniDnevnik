@@ -11,7 +11,7 @@ namespace Backend.Controllers
     [ApiController]
     [Route("app/v1/[controller]")]
 
-    public class UlovController
+    public class UlovController : ControllerBase
     {
         private readonly RibolovniDnevnikContex _contex;
         public UlovController(RibolovniDnevnikContex contex) { _contex = contex; }

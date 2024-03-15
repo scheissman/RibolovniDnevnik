@@ -11,7 +11,7 @@ namespace Backend.Controllers
     [ApiController]
     [Route("app/v1/[controller]")]
 
-    public class RibaController
+    public class RibaController : ControllerBase
     {
      
         //dependency injection
