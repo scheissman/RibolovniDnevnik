@@ -5,7 +5,16 @@ using Microsoft.Identity.Client;
 
 namespace Backend.Controllers
 {
+
+
+
+
     [ApiController]
+
+
+
+    
+    
     [Route("api/v1/[controller]")]
     public class KorisnikController : ControllerBase
 
@@ -18,6 +27,8 @@ namespace Backend.Controllers
 
         //u  konstruktoru primimo instancu i djdelimo privatnom svojstvu
 
+        
+
         public KorisnikController (RibolovniDnevnikContex contex) { _contex = contex; }
         [HttpGet]
 
@@ -26,10 +37,38 @@ namespace Backend.Controllers
             return new JsonResult(_contex.Korisnici.ToList());
         }
 
+
+
         [HttpPost]
+        [Route("faker")]
+        public int FakerUnos(int BrojImena)
+        {
+
+            for (int i = 0; i < BrojImena; i++)
+            {
+                _contex.Korisnici.Add(new Korisnik()
+                {
+
+                    Ime = Faker.Name.First(),
+                    Prezime = Faker.Name.Last(),
+                    Email = Faker.Internet.Email(),
+
+                });
+
+                
+
+
+
+            }
+
+            return 0;
+
+        }
+
+            [HttpPost]
         public IActionResult Post(Korisnik korisnik)
         {
-            _contex.Korisnici.Add(korisnik);
+            ;
             _contex.SaveChanges();
 
 
@@ -50,6 +89,29 @@ namespace Backend.Controllers
 
 
         }
+        [HttpDelete]
+        [Route("faker/")]
+        public IActionResult FakerBrisanje(int ObrisiSveVeceOdId)
+        {
+            var BrisanjeIzBaze = _contex.Korisnici.Where(x => x.id > ObrisiSveVeceOdId);
+            _contex.Korisnici.RemoveRange(BrisanjeIzBaze);
+
+
+
+
+            
+            _contex.SaveChanges();
+            return new JsonResult(new { poruka = "obrisano" });
+
+
+
+
+
+
+
+        }
+
+
         [HttpPut]
         [Route("{id:int}")]
 

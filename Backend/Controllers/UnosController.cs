@@ -1,7 +1,7 @@
 ﻿using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 { 
@@ -16,7 +16,7 @@ namespace Backend.Controllers
 
     public IActionResult Get()
     {
-        return new JsonResult(_contex.Unosi.ToList());
+        return new JsonResult(_contex.Unosi.Include(u=>u.Korisnik).ToList());
     }
 
     [HttpPost]
