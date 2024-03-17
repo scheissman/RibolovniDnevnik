@@ -21,7 +21,7 @@ namespace Backend.Controllers
         public IActionResult Get()
         {
             var UlovSUnosom = _context.Unosi.Include(u => u.Korisnik).ToList();
-            var UlovSRibom = _context.Ulovi.Include(u => u.Riba).ToList();
+            var UlovSRibom = _context.Ribe.Include(u => u.Riba).ToList();
 
 
             var kombinovano = new
