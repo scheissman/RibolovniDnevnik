@@ -20,7 +20,19 @@ namespace Backend.Controllers
 
         public IActionResult Get()
         {
-            return new JsonResult(_context.Ulovi.ToList());
+            var UlovSUnosom = _context.Unosi.Include(u => u.Korisnik).ToList();
+            var UlovSRibom = _context.Ulovi.Include(u => u.Riba).ToList();
+
+
+            var kombinovano = new
+            {
+                Ulovi = UlovSUnosom,
+                Unosi = UlovSRibom
+            };
+
+            return new JsonResult(kombinovano);
+
+
         }
 
         [HttpPost]

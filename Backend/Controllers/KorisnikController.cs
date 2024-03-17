@@ -55,11 +55,12 @@ namespace Backend.Controllers
 
                 });
 
-                
 
 
 
             }
+            _context.SaveChanges();
+
 
             return 0;
 
@@ -95,19 +96,8 @@ namespace Backend.Controllers
         {
             var BrisanjeIzBaze = _context.Korisnici.Where(x => x.id > ObrisiSveVeceOdId);
             _context.Korisnici.RemoveRange(BrisanjeIzBaze);
-
-
-
-
-            
             _context.SaveChanges();
             return new JsonResult(new { poruka = "obrisano" });
-
-
-
-
-
-
 
         }
 
