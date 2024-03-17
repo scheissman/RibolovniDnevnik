@@ -7,7 +7,7 @@ namespace Backend.Models
 
         [ForeignKey("korisnici_id")]
 
-        public Korisnik Korisnik { get; set; }
+        public Korisnik? Korisnik { get; set; }
 
         public DateTime? Datum { get; set; }
         public int? Vodostaj { get; set; }

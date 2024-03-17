@@ -14,20 +14,20 @@ namespace Backend.Controllers
 
     public class UlovController : ControllerBase
     {
-        private readonly RibolovniDnevnikContex _contex;
-        public UlovController(RibolovniDnevnikContex contex) { _contex = contex; }
+        private readonly RibolovniDnevnikContext _context;
+        public UlovController(RibolovniDnevnikContext context) { _context = context; }
         [HttpGet]
 
         public IActionResult Get()
         {
-            return new JsonResult(_contex.Ulovi.ToList());
+            return new JsonResult(_context.Ulovi.ToList());
         }
 
         [HttpPost]
         public IActionResult Post(Ulov ulov)
         {
-            _contex.Ulovi.Add(ulov);
-            _contex.SaveChanges();
+            _context.Ulovi.Add(ulov);
+            _context.SaveChanges();
 
 
             return new JsonResult(ulov);
@@ -39,10 +39,10 @@ namespace Backend.Controllers
 
         public IActionResult Delete(int id)
         {
-            var UloviIzBaze = _contex.Ulovi.Find(id);
+            var UloviIzBaze = _context.Ulovi.Find(id);
 
-            _contex.Ulovi.Remove(UloviIzBaze);
-            _contex.SaveChanges();
+            _context.Ulovi.Remove(UloviIzBaze);
+            _context.SaveChanges();
             return new JsonResult(new { poruka = "obrisano" });
 
 
@@ -53,7 +53,7 @@ namespace Backend.Controllers
 
         public IActionResult Put(int id, Ulov ulov)
         {
-            var UloviIzBaze = _contex.Ulovi.Find(id);
+            var UloviIzBaze = _context.Ulovi.Find(id);
             UloviIzBaze.Kolicina = ulov.Kolicina;
             UloviIzBaze.Riba = ulov.Riba;
             UloviIzBaze.Tezina = ulov.Tezina;
@@ -61,8 +61,8 @@ namespace Backend.Controllers
             UloviIzBaze.Unos = ulov.Unos;
 
 
-            _contex.Ulovi.Update(UloviIzBaze);
-            _contex.SaveChanges();
+            _context.Ulovi.Update(UloviIzBaze);
+            _context.SaveChanges();
 
 
             return new JsonResult(UloviIzBaze);

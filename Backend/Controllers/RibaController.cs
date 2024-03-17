@@ -17,23 +17,23 @@ namespace Backend.Controllers
         //dependency injection
         //privatno svojstvo
 
-        private readonly RibolovniDnevnikContex _contex;
+        private readonly RibolovniDnevnikContext _context;
 
         //u  konstruktoru primimo instancu i djdelimo privatnom svojstvu
 
-        public RibaController (RibolovniDnevnikContex contex) { _contex = contex; }
+        public RibaController (RibolovniDnevnikContext context) { _context = context; }
         [HttpGet]
 
         public IActionResult Get()
         {
-            return new JsonResult(_contex.Ribe.ToList());
+            return new JsonResult(_context.Ribe.ToList());
         }
 
         [HttpPost]
         public IActionResult Post(Riba riba)
         {
-            _contex.Ribe.Add(riba);
-            _contex.SaveChanges();
+            _context.Ribe.Add(riba);
+            _context.SaveChanges();
 
 
             return new JsonResult(riba);
@@ -45,10 +45,10 @@ namespace Backend.Controllers
 
         public IActionResult Delete(int id)
         {
-            var RibeIzBaze = _contex.Ribe.Find(id);
+            var RibeIzBaze = _context.Ribe.Find(id);
 
-            _contex.Ribe.Remove(RibeIzBaze);
-            _contex.SaveChanges();
+            _context.Ribe.Remove(RibeIzBaze);
+            _context.SaveChanges();
             return new JsonResult(new  { poruka = "obrisano" });
 
 
@@ -59,12 +59,12 @@ namespace Backend.Controllers
 
         public IActionResult Put(int id ,  Riba riba)
         {
-            var RibeIzBaze = _contex.Ribe.Find(id);
+            var RibeIzBaze = _context.Ribe.Find(id);
             RibeIzBaze.Vrsta = riba.Vrsta;
             
 
-            _contex.Ribe.Update(RibeIzBaze);
-            _contex.SaveChanges();
+            _context.Ribe.Update(RibeIzBaze);
+            _context.SaveChanges();
 
 
             return new JsonResult(RibeIzBaze);

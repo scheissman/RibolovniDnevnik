@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data
 {
-    public class RibolovniDnevnikContex : DbContext
+    public class RibolovniDnevnikContext : DbContext
     {
 
-        public RibolovniDnevnikContex(DbContextOptions<RibolovniDnevnikContex> options) : base(options) {
+        public RibolovniDnevnikContext(DbContextOptions<RibolovniDnevnikContext> options) : base(options) {
         
         
         

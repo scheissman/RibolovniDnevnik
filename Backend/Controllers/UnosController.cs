@@ -10,20 +10,20 @@ namespace Backend.Controllers
     [Route("api/v1/[controller]")]
     public class UnosController : ControllerBase
     {
-    private readonly RibolovniDnevnikContex _contex;
-    public UnosController(RibolovniDnevnikContex contex) { _contex = contex; }
+    private readonly RibolovniDnevnikContext _context;
+    public UnosController(RibolovniDnevnikContext context) { _context = context; }
     [HttpGet]
 
     public IActionResult Get()
     {
-        return new JsonResult(_contex.Unosi.Include(u=>u.Korisnik).ToList());
+        return new JsonResult(_context.Unosi.Include(u=>u.Korisnik).ToList());
     }
 
     [HttpPost]
     public IActionResult Post(Unos  unos)
     {
-        _contex.Unosi.Add(unos);
-        _contex.SaveChanges();
+        _context.Unosi.Add(unos);
+        _context.SaveChanges();
 
 
         return new JsonResult(unos);
@@ -35,10 +35,10 @@ namespace Backend.Controllers
 
     public IActionResult Delete(int id)
     {
-        var UnosIzBaze = _contex.Unosi.Find(id);
+        var UnosIzBaze = _context.Unosi.Find(id);
 
-        _contex.Unosi.Remove(UnosIzBaze);
-        _contex.SaveChanges();
+        _context.Unosi.Remove(UnosIzBaze);
+        _context.SaveChanges();
         return new JsonResult(new { poruka = "obrisano" });
 
 
@@ -49,15 +49,15 @@ namespace Backend.Controllers
 
     public IActionResult Put(int id, Unos unos)
     {
-        var UnosIzBaze = _contex.Unosi.Find(id);
+        var UnosIzBaze = _context.Unosi.Find(id);
             UnosIzBaze.Korisnik = unos.Korisnik;
         UnosIzBaze.Vodostaj = unos.Vodostaj;
         UnosIzBaze.Datum = unos.Datum;
         UnosIzBaze.Biljeska = unos.Biljeska;
 
 
-        _contex.Unosi.Update(UnosIzBaze);
-        _contex.SaveChanges();
+        _context.Unosi.Update(UnosIzBaze);
+        _context.SaveChanges();
 
 
         return new JsonResult(UnosIzBaze);

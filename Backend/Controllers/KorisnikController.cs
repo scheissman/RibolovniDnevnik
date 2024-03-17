@@ -23,18 +23,18 @@ namespace Backend.Controllers
         //dependency injection
         //privatno svojstvo
 
-        private readonly RibolovniDnevnikContex _contex;
+        private readonly RibolovniDnevnikContext _context;
 
         //u  konstruktoru primimo instancu i djdelimo privatnom svojstvu
 
         
 
-        public KorisnikController (RibolovniDnevnikContex contex) { _contex = contex; }
+        public KorisnikController (RibolovniDnevnikContext context) { _context = context; }
         [HttpGet]
 
         public IActionResult Get()
         {
-            return new JsonResult(_contex.Korisnici.ToList());
+            return new JsonResult(_context.Korisnici.ToList());
         }
 
 
@@ -46,7 +46,7 @@ namespace Backend.Controllers
 
             for (int i = 0; i < BrojImena; i++)
             {
-                _contex.Korisnici.Add(new Korisnik()
+                _context.Korisnici.Add(new Korisnik()
                 {
 
                     Ime = Faker.Name.First(),
@@ -69,7 +69,7 @@ namespace Backend.Controllers
         public IActionResult Post(Korisnik korisnik)
         {
             ;
-            _contex.SaveChanges();
+            _context.SaveChanges();
 
 
             return new JsonResult(korisnik);
@@ -81,10 +81,10 @@ namespace Backend.Controllers
 
         public IActionResult Delete(int id)
         {
-            var KorisniciIzBaze = _contex.Korisnici.Find(id);
+            var KorisniciIzBaze = _context.Korisnici.Find(id);
 
-            _contex.Korisnici.Remove(KorisniciIzBaze);
-            _contex.SaveChanges();
+            _context.Korisnici.Remove(KorisniciIzBaze);
+            _context.SaveChanges();
             return new JsonResult(new  { poruka = "obrisano" });
 
 
@@ -93,14 +93,14 @@ namespace Backend.Controllers
         [Route("faker/")]
         public IActionResult FakerBrisanje(int ObrisiSveVeceOdId)
         {
-            var BrisanjeIzBaze = _contex.Korisnici.Where(x => x.id > ObrisiSveVeceOdId);
-            _contex.Korisnici.RemoveRange(BrisanjeIzBaze);
+            var BrisanjeIzBaze = _context.Korisnici.Where(x => x.id > ObrisiSveVeceOdId);
+            _context.Korisnici.RemoveRange(BrisanjeIzBaze);
 
 
 
 
             
-            _contex.SaveChanges();
+            _context.SaveChanges();
             return new JsonResult(new { poruka = "obrisano" });
 
 
@@ -118,13 +118,13 @@ namespace Backend.Controllers
 
         public IActionResult Put(int id ,  Korisnik korisnik)
         {
-            var KorisniciIzBaze = _contex.Korisnici.Find(id);
+            var KorisniciIzBaze = _context.Korisnici.Find(id);
             KorisniciIzBaze.Ime = korisnik.Ime;
             KorisniciIzBaze.Prezime = korisnik.Prezime;
             KorisniciIzBaze.Email = korisnik.Email;
 
-            _contex.Korisnici.Update(KorisniciIzBaze);
-            _contex.SaveChanges();
+            _context.Korisnici.Update(KorisniciIzBaze);
+            _context.SaveChanges();
 
 
             return new JsonResult(KorisniciIzBaze);

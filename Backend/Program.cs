@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //dodavanje baze podataka
-builder.Services.AddDbContext<RibolovniDnevnikContex>(o =>
+builder.Services.AddDbContext<RibolovniDnevnikContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("RibolovniDnevnikContext"));
 });
@@ -38,6 +38,6 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseDefaultFiles();
 app.MapFallbackToFile("index.html");
-// završio za potrebe produkcije
+// zavrï¿½io za potrebe produkcije
 
 app.Run();
