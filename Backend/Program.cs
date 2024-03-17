@@ -38,6 +38,6 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseDefaultFiles();
 app.MapFallbackToFile("index.html");
-// zavr�io za potrebe produkcije
+// zavrsio za potrebe produkcije
 
 app.Run();

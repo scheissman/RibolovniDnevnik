@@ -16,7 +16,8 @@ namespace Backend.Controllers
 
     public IActionResult Get()
     {
-        return new JsonResult(_context.Unosi.Include(u=>u.Korisnik).ToList());
+            var UnosSKorisnicima  = _context.Unosi.Include(u => u.Korisnik).ToList();
+            return new JsonResult(_context.Unosi.ToList());
     }
 
     [HttpPost]

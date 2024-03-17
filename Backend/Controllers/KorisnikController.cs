@@ -69,7 +69,9 @@ namespace Backend.Controllers
             [HttpPost]
         public IActionResult Post(Korisnik korisnik)
         {
-            ;
+            _context.Korisnici.Add(korisnik);
+
+
             _context.SaveChanges();
 
 
