@@ -1,4 +1,5 @@
-﻿using Backend.Data;
+﻿using AutoMapper;
+using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -27,14 +28,34 @@ namespace Backend.Controllers
 
         //u  konstruktoru primimo instancu i djdelimo privatnom svojstvu
 
-        
+        //dodajem maper
+        IMapper _mapper;
 
-        public KorisnikController (RibolovniDnevnikContext context) { _context = context; }
+
+
+        public KorisnikController(RibolovniDnevnikContext context) {
+            _context = context; 
+            _mapper = new Mapper(new MapperConfiguration(c =>
+            {
+                c.CreateMap<KorisnikDTO, Korisnik>();
+                c.CreateMap<Korisnik, KorisnikDTO>();
+
+            }));
+        
+        }
+
         [HttpGet]
 
         public IActionResult Get()
         {
-            return new JsonResult(_context.Korisnici.ToList());
+
+            
+            var korisnici = _context.Korisnici.ToList();
+
+            var korisniciDto = _mapper.Map<List<KorisnikDTO>>(korisnici);
+
+            
+            return new JsonResult(korisniciDto);
         }
 
 
@@ -67,9 +88,14 @@ namespace Backend.Controllers
         }
 
             [HttpPost]
-        public IActionResult Post(Korisnik korisnik)
+        public IActionResult Post(KorisnikDTO korisnik)
         {
-            _context.Korisnici.Add(korisnik);
+
+
+            Korisnik DodajKorisnik = _mapper.Map<Korisnik>(korisnik);
+
+            
+            _context.Korisnici.Add(DodajKorisnik);
 
 
             _context.SaveChanges();
