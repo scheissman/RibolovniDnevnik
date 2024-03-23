@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Backend.Data;
@@ -29,15 +29,15 @@ namespace Backend.Services
             return await _context.Korisnici.FindAsync(id);
         }
 
-        public async Task<int> CreateKorisnikAsync(RecDto.KorisnikDto korisnikDto)
+        public async Task<int> CreateKorisnikAsync(KorisnikDto korisnikDto)
         {
             var korisnik = _mapper.Map<Korisnik>(korisnikDto);
             _context.Korisnici.Add(korisnik);
             await _context.SaveChangesAsync();
-            return korisnik.id; 
+            return korisnik.id;
         }
 
-        public async Task<bool> UpdateKorisnikAsync(int id, RecDto.KorisnikDto korisnikDto)
+        public async Task<bool> UpdateKorisnikAsync(int id, KorisnikDto korisnikDto)
         {
             var korisnik = await _context.Korisnici.FindAsync(id);
             if (korisnik == null)
@@ -58,5 +58,6 @@ namespace Backend.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
     }
 }
