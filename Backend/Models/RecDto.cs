@@ -3,7 +3,7 @@
     public class RecDto
     {
 
-        public record KorisnikDto(string ime , string  prezime , string email);
+        public record KorisnikDto(string Ime , string  Prezime , string Email);
 
 
 

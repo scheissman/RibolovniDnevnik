@@ -15,8 +15,8 @@ namespace Backend.Controllers
 
 
 
-    
-    
+
+
     [Route("api/v1/[controller]")]
     public class KorisnikController : ControllerBase
 
@@ -34,15 +34,16 @@ namespace Backend.Controllers
 
 
 
-        public KorisnikController(RibolovniDnevnikContext context) {
-            _context = context; 
+        public KorisnikController(RibolovniDnevnikContext context)
+        {
+            _context = context;
             _mapper = new Mapper(new MapperConfiguration(c =>
             {
                 c.CreateMap<RecDto.KorisnikDto, Korisnik>();
                 c.CreateMap<Korisnik, RecDto.KorisnikDto>();
 
             }));
-        
+
         }
 
         [HttpGet]
@@ -50,17 +51,17 @@ namespace Backend.Controllers
         public async Task<ActionResult<List<Korisnik>>> Get()
         {
 
-            
-            var korisnici =await _context.Korisnici.ToListAsync();
+
+            var korisnici = await _context.Korisnici.ToListAsync();
 
             var korisniciDto = _mapper.Map<List<RecDto.KorisnikDto>>(korisnici);
 
-            
+
             return Ok(korisniciDto);
         }
 
         [HttpGet("{id}")]
-        
+
         public async Task<ActionResult<Korisnik>> Get(int id)
         {
 
@@ -104,14 +105,14 @@ namespace Backend.Controllers
 
         }
 
-         [HttpPost]
-        public async Task<ActionResult<List<RecDto.KorisnikDto>>> Post (RecDto.KorisnikDto korisnik )
+        [HttpPost]
+        public async Task<ActionResult<List<RecDto.KorisnikDto>>> Post(RecDto.KorisnikDto korisnik)
         {
 
 
             Korisnik DodajKorisnik = _mapper.Map<Korisnik>(korisnik);
 
-            
+
             _context.Korisnici.Add(DodajKorisnik);
 
 
@@ -128,14 +129,14 @@ namespace Backend.Controllers
         public async Task<ActionResult<List<Korisnik>>> Delete(int id)
         {
             var KorisniciIzBaze = await _context.Korisnici.FindAsync(id);
-            if (KorisniciIzBaze== null)
+            if (KorisniciIzBaze == null)
             {
                 return BadRequest("Greška u brisanju ");
             }
 
-           _context.Korisnici.Remove(KorisniciIzBaze);
-           await _context.SaveChangesAsync();
-            return Ok(new  { poruka = "obrisano" });
+            _context.Korisnici.Remove(KorisniciIzBaze);
+            await _context.SaveChangesAsync();
+            return Ok(new { poruka = "obrisano" });
 
 
         }
@@ -156,20 +157,20 @@ namespace Backend.Controllers
 
         public async Task<ActionResult<List<RecDto.KorisnikDto>>> Update(int id, RecDto.KorisnikDto korisnik)
 
-        
+
         {
             var KorisniciIzBaze = await _context.Korisnici.FindAsync(id);
-            if(KorisniciIzBaze == null)
+            if (KorisniciIzBaze == null)
             {
                 return BadRequest("Greška , nije dobar id");
             }
 
-            
-            
-            KorisniciIzBaze.Ime = korisnik.ime;
 
-            KorisniciIzBaze.Prezime = korisnik.prezime;
-            KorisniciIzBaze.Email = korisnik.email;
+
+            KorisniciIzBaze.Ime = korisnik.Ime;
+
+            KorisniciIzBaze.Prezime = korisnik.Prezime;
+            KorisniciIzBaze.Email = korisnik.Email;
 
             _context.Korisnici.Update(KorisniciIzBaze);
             await _context.SaveChangesAsync();
