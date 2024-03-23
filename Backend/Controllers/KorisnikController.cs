@@ -38,8 +38,8 @@ namespace Backend.Controllers
             _context = context; 
             _mapper = new Mapper(new MapperConfiguration(c =>
             {
-                c.CreateMap<KorisnikDTO, Korisnik>();
-                c.CreateMap<Korisnik, KorisnikDTO>();
+                c.CreateMap<RecDto.KorisnikDto, Korisnik>();
+                c.CreateMap<Korisnik, RecDto.KorisnikDto>();
 
             }));
         
@@ -53,7 +53,7 @@ namespace Backend.Controllers
             
             var korisnici =await _context.Korisnici.ToListAsync();
 
-            var korisniciDto = _mapper.Map<List<KorisnikDTO>>(korisnici);
+            var korisniciDto = _mapper.Map<List<RecDto.KorisnikDto>>(korisnici);
 
             
             return Ok(korisniciDto);
@@ -105,7 +105,7 @@ namespace Backend.Controllers
         }
 
          [HttpPost]
-        public async Task<ActionResult<List<KorisnikDTO>>> Post (KorisnikDTO korisnik )
+        public async Task<ActionResult<List<RecDto.KorisnikDto>>> Post (RecDto.KorisnikDto korisnik )
         {
 
 
@@ -154,7 +154,7 @@ namespace Backend.Controllers
         [HttpPut]
         [Route("{id:int}")]
 
-        public async Task<ActionResult<List<KorisnikDTO>>> Update(int id, KorisnikDTO korisnik)
+        public async Task<ActionResult<List<RecDto.KorisnikDto>>> Update(int id, RecDto.KorisnikDto korisnik)
 
         
         {
@@ -166,10 +166,10 @@ namespace Backend.Controllers
 
             
             
-            KorisniciIzBaze.Ime = korisnik.Ime;
+            KorisniciIzBaze.Ime = korisnik.ime;
 
-            KorisniciIzBaze.Prezime = korisnik.Prezime;
-            KorisniciIzBaze.Email = korisnik.Email;
+            KorisniciIzBaze.Prezime = korisnik.prezime;
+            KorisniciIzBaze.Email = korisnik.email;
 
             _context.Korisnici.Update(KorisniciIzBaze);
             await _context.SaveChangesAsync();
