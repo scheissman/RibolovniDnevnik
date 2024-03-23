@@ -2,6 +2,7 @@
 using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace Backend.Controllers
@@ -46,17 +47,33 @@ namespace Backend.Controllers
 
         [HttpGet]
 
-        public IActionResult Get()
+        public async Task<ActionResult<List<Korisnik>>> Get()
         {
 
             
-            var korisnici = _context.Korisnici.ToList();
+            var korisnici =await _context.Korisnici.ToListAsync();
 
             var korisniciDto = _mapper.Map<List<KorisnikDTO>>(korisnici);
 
             
-            return new JsonResult(korisniciDto);
+            return Ok(korisniciDto);
         }
+
+        [HttpGet("{id}")]
+        
+        public async Task<ActionResult<Korisnik>> Get(int id)
+        {
+
+
+            var korisnik = await _context.Korisnici.FindAsync(id);
+            if (korisnik == null)
+            {
+                return NotFound("Korisnik nije pronađen");
+            }
+
+            return Ok(korisnik);
+        }
+
 
 
 
@@ -87,8 +104,8 @@ namespace Backend.Controllers
 
         }
 
-            [HttpPost]
-        public IActionResult Post(KorisnikDTO korisnik)
+         [HttpPost]
+        public async Task<ActionResult<List<KorisnikDTO>>> Post (KorisnikDTO korisnik )
         {
 
 
@@ -98,23 +115,27 @@ namespace Backend.Controllers
             _context.Korisnici.Add(DodajKorisnik);
 
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
 
-            return new JsonResult(korisnik);
+            return Ok("Korisnik uspjesno dodan ");
         }
 
         [HttpDelete]
         [Route("{id:int}")]
         [Produces("application/json")]
 
-        public IActionResult Delete(int id)
+        public async Task<ActionResult<List<Korisnik>>> Delete(int id)
         {
-            var KorisniciIzBaze = _context.Korisnici.Find(id);
+            var KorisniciIzBaze = await _context.Korisnici.FindAsync(id);
+            if (KorisniciIzBaze== null)
+            {
+                return BadRequest("Greška u brisanju ");
+            }
 
-            _context.Korisnici.Remove(KorisniciIzBaze);
-            _context.SaveChanges();
-            return new JsonResult(new  { poruka = "obrisano" });
+           _context.Korisnici.Remove(KorisniciIzBaze);
+           await _context.SaveChangesAsync();
+            return Ok(new  { poruka = "obrisano" });
 
 
         }
@@ -133,19 +154,28 @@ namespace Backend.Controllers
         [HttpPut]
         [Route("{id:int}")]
 
+        public async Task<ActionResult<List<KorisnikDTO>>> Update(int id, KorisnikDTO korisnik)
 
-        public IActionResult Put(int id ,  Korisnik korisnik)
+        
         {
-            var KorisniciIzBaze = _context.Korisnici.Find(id);
+            var KorisniciIzBaze = await _context.Korisnici.FindAsync(id);
+            if(KorisniciIzBaze == null)
+            {
+                return BadRequest("Greška , nije dobar id");
+            }
+
+            
+            
             KorisniciIzBaze.Ime = korisnik.Ime;
+
             KorisniciIzBaze.Prezime = korisnik.Prezime;
             KorisniciIzBaze.Email = korisnik.Email;
 
             _context.Korisnici.Update(KorisniciIzBaze);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
+            return Ok(new { Message = "uspjesno promjenjen korisnik", Data = KorisniciIzBaze });
 
-            return new JsonResult(KorisniciIzBaze);
         }
 
 
