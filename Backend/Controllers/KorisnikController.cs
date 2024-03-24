@@ -5,7 +5,7 @@ using AutoMapper;
 using Backend.Services;
 using Backend.Models;
 
-using KorisnikDto = Backend.Models.KorisnikDto;
+using KorisnikDto = Backend.Models.DtoRec.KorisnikDto;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 
@@ -66,7 +66,7 @@ namespace Backend.Controllers
         //}
 
         [HttpGet]
-        public async Task<ActionResult<List<KorisnikDto>>> Get()
+        public async Task<ActionResult<List<DtoRec.KorisnikDto>>> Get()
         {
             var korisnici = await _korisnikService.GetAllKorisniciAsync();
             var korisniciDto = _mapper.Map<List<KorisnikDto>>(korisnici);
@@ -74,29 +74,30 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<KorisnikDto>> Get(int id)
+        public async Task<ActionResult<DtoRec.KorisnikDto>> Get(int id)
         {
             var korisnik = await _korisnikService.GetKorisnikByIdAsync(id);
             if (korisnik == null)
-                return NotFound();
+                return NotFound("Greška");
 
             var korisnikDto = _mapper.Map<Korisnik>(korisnik);
             return Ok(korisnikDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(KorisnikDto korisnikDto)
+        public async Task<ActionResult<int>> Post(DtoRec.KorisnikDto korisnikDto)
         {
             var korisnikId = await _korisnikService.CreateKorisnikAsync(korisnikDto);
+
             return Ok(korisnikId);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, KorisnikDto korisnikDto)
+        public async Task<ActionResult> Put(int id, DtoRec.KorisnikDto korisnikDto)
         {
             var result = await _korisnikService.UpdateKorisnikAsync(id, korisnikDto);
             if (!result)
-                return NotFound();
+                return NotFound("Greška");
 
             return Ok();
         }
@@ -106,7 +107,7 @@ namespace Backend.Controllers
         {
             var result = await _korisnikService.DeleteKorisnikAsync(id);
             if (!result)
-                return NotFound();
+                return NotFound("Greška");
 
             return Ok();
         }

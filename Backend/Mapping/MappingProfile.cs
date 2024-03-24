@@ -6,7 +6,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Korisnik, KorisnikDto>();
-        CreateMap<KorisnikDto, Korisnik>();
+        CreateMap<Korisnik, DtoRec.KorisnikDto>();
+        CreateMap<DtoRec.KorisnikDto, Korisnik>();
     }
 }

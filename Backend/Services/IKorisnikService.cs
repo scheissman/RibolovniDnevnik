@@ -4,7 +4,7 @@ public interface IKorisnikService
 {
     Task<List<Korisnik>> GetAllKorisniciAsync();
     Task<Korisnik> GetKorisnikByIdAsync(int id);
-    Task<int> CreateKorisnikAsync(KorisnikDto korisnikDto);
-    Task<bool> UpdateKorisnikAsync(int id, KorisnikDto korisnikDto);
+    Task<int> CreateKorisnikAsync(DtoRec.KorisnikDto korisnikDto);
+    Task<bool> UpdateKorisnikAsync(int id, DtoRec.KorisnikDto korisnikDto);
     Task<bool> DeleteKorisnikAsync(int id);
 }

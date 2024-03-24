@@ -29,7 +29,7 @@ namespace Backend.Services
             return await _context.Korisnici.FindAsync(id);
         }
 
-        public async Task<int> CreateKorisnikAsync(KorisnikDto korisnikDto)
+        public async Task<int> CreateKorisnikAsync(DtoRec.KorisnikDto korisnikDto)
         {
             var korisnik = _mapper.Map<Korisnik>(korisnikDto);
             _context.Korisnici.Add(korisnik);
@@ -37,7 +37,7 @@ namespace Backend.Services
             return korisnik.id;
         }
 
-        public async Task<bool> UpdateKorisnikAsync(int id, KorisnikDto korisnikDto)
+        public async Task<bool> UpdateKorisnikAsync(int id, DtoRec.KorisnikDto korisnikDto)
         {
             var korisnik = await _context.Korisnici.FindAsync(id);
             if (korisnik == null)
@@ -59,5 +59,6 @@ namespace Backend.Services
             return true;
         }
 
+      
     }
 }
