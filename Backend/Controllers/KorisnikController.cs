@@ -6,6 +6,8 @@ using Backend.Services;
 using Backend.Models;
 
 using KorisnikDto = Backend.Models.KorisnikDto;
+using Microsoft.EntityFrameworkCore;
+using Backend.Data;
 
 namespace Backend.Controllers
 {
@@ -16,11 +18,52 @@ namespace Backend.Controllers
         private readonly IMapper _mapper;
         private readonly IKorisnikService _korisnikService;
 
-        public KorisnikController(IMapper mapper, IKorisnikService korisnikService)
+        //private readonly RibolovniDnevnikContext _context;
+
+        //ZA FAKER TREBA ODKOMENTIRATI readonly, kontroler, te post i delete. Sa servisima ne koristi context
+        public KorisnikController(IMapper mapper, IKorisnikService korisnikService/*,RibolovniDnevnikContext context*/ )
         {
             _mapper = mapper;
             _korisnikService = korisnikService;
+            //_context = context;
         }
+
+        //[HttpPost]
+        //[Route("faker")]
+        //public int FakerUnos(int BrojImena)
+        //{
+
+        //    for (int i = 0; i < BrojImena; i++)
+        //    {
+        //        _context.Korisnici.Add(new Korisnik()
+        //        {
+
+        //            Ime = Faker.Name.First(),
+        //            Prezime = Faker.Name.Last(),
+        //            Email = Faker.Internet.Email(),
+
+        //        });
+
+
+
+
+        //    }
+        //    _context.SaveChanges();
+
+
+        //    return 0;
+
+        //}
+        //[HttpDelete]
+        //[Route("faker/")]
+        //public IActionResult FakerBrisanje(int ObrisiSveVeceOdId)
+        //{
+        //    var BrisanjeIzBaze = _context.Korisnici.Where(x => x.id > ObrisiSveVeceOdId);
+        //    _context.Korisnici.RemoveRange(BrisanjeIzBaze);
+        //    _context.SaveChanges();
+        //    return new JsonResult(new { poruka = "obrisano" });
+
+        //}
 
         [HttpGet]
         public async Task<ActionResult<List<KorisnikDto>>> Get()
