@@ -22,6 +22,7 @@ builder.Services.AddCors(opcije =>
     );
 
 });
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IKorisnikService, KorisnikService>();
 //dodavanje baze podataka

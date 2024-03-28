@@ -66,15 +66,15 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<DtoRec.KorisnikDto>>> Get()
+        public async Task<ActionResult<List<Korisnik>>> Get()
         {
             var korisnici = await _korisnikService.GetAllKorisniciAsync();
-            var korisniciDto = _mapper.Map<List<KorisnikDto>>(korisnici);
+            var korisniciDto = _mapper.Map<List<Korisnik>>(korisnici);
             return Ok(korisniciDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<DtoRec.KorisnikDto>> Get(int id)
+        public async Task<ActionResult<Korisnik>> Get(int id)
         {
             var korisnik = await _korisnikService.GetKorisnikByIdAsync(id);
             if (korisnik == null)
@@ -109,7 +109,7 @@ namespace Backend.Controllers
             if (!result)
                 return NotFound("Greška");
 
-            return Ok();
+            return NoContent();
         }
     }
 }
