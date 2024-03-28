@@ -1,0 +1,35 @@
+.gornji_logo {
+  background-color: #1986aa;
+  height: 140px;
+}
+
+.donji_logo {
+  
+  
+  
+  background-color: #1986aa;
+  height: 40px;
+}
+
+.kontejner {
+  height: auto;
+  max-width: 600px;
+  margin: auto;
+}
+
+
+.donji_logo {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1986aa; 
+  color: white; 
+  padding: 20px;
+}
+
+
+.siroko{
+  width: 100%;
+}
+
