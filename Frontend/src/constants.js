@@ -3,5 +3,5 @@ export const RoutesNames = {
 
   KORISNIK_PREGLED: "/korisnik",
   KORISNIK_NOVI: "/korisnik/dodaj",
-  KORISNIK_PROMJENI: "/korisnik/:sifra",
+  KORISNIK_PROMJENI: "/korisnik/:id",
 };

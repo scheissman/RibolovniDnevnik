@@ -3,12 +3,12 @@ import Container from "react-bootstrap/Container";
 import { Table, Button } from "react-bootstrap";
 import KorisnikService from "../../services/KorisnikService";
 import BlockExample from "../../components/velikodugackodugme";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../constants";
 
 export default function Korisnici() {
   const [korisnici, setKorisnici] = useState([]);
-
+  const navigate = useNavigate();
   async function getKorisnici() {
     try {
       const response = await KorisnikService.get();
@@ -60,7 +60,9 @@ export default function Korisnici() {
               <td>
                 <Button
                   variant="primary"
-                  onClick={() => handleUpdate(korisnik.id)}
+                  onClick={() => {
+                    navigate(`/Korisnik/${korisnik.id}`);
+                  }}
                 >
                   Promjeni
                 </Button>
