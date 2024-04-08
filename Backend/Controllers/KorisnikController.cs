@@ -2,114 +2,45 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Backend.Services;
 using Backend.Models;
 
-using KorisnikDto = Backend.Models.DtoRec.KorisnikDto;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
+using System.Text;
 
 namespace Backend.Controllers
 {
+
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class KorisnikController : ControllerBase
+    public class KorisnikController : UniverzalniController<Korisnik,KorisnikDTORead,KorisnikDTOInsertUpdate>
     {
-        private readonly IMapper _mapper;
-        private readonly IKorisnikService _korisnikService;
-
-        private readonly RibolovniDnevnikContext _context;
-
-        //ZA FAKER TREBA ODKOMENTIRATI readonly, kontroler, te post i delete. Sa servisima ne koristi context
-        public KorisnikController(IMapper mapper, IKorisnikService korisnikService,RibolovniDnevnikContext context )
+        public KorisnikController(RibolovniDnevnikContext context) : base(context)
         {
-            _mapper = mapper;
-            _korisnikService = korisnikService;
-            _context = context;
+            DbSet = _context.Korisnici;
         }
-
-        [HttpPost]
-        [Route("faker")]
-        public int FakerUnos(int BrojImena)
+        
+        
+        
+        protected override void KontrolaBrisanje(Korisnik entitet)
         {
+            var lista = _context.Unosi
+                .Include(x => x.Korisnik)
 
-            for (int i = 0; i < BrojImena; i++)
+                .Where(x => x.Korisnik.id == entitet.id)
+                .ToList();
+            if (lista != null && lista.Count > 0)
             {
-                _context.Korisnici.Add(new Korisnik()
+                StringBuilder sb = new();
+                sb.Append("Korisnik se ne može obrisati jer je postavljen na Unosu: ");
+                foreach (var e in lista)
                 {
-
-                    Ime = Faker.Name.First(),
-                    Prezime = Faker.Name.Last(),
-                    Email = Faker.Internet.Email(),
-
-                });
-
-
-
-
+                    sb.Append(e.Korisnik).Append(", ");
+                }
+                throw new Exception(sb.ToString()[..^26]); // umjesto sb.ToString().Substring(0, sb.ToString().Length - 2)
             }
-            _context.SaveChanges();
-
-
-            return 0;
-
-        }
-        [HttpDelete]
-        [Route("faker/")]
-        public IActionResult FakerBrisanje(int ObrisiSveVeceOdId)
-        {
-            var BrisanjeIzBaze = _context.Korisnici.Where(x => x.id > ObrisiSveVeceOdId);
-            _context.Korisnici.RemoveRange(BrisanjeIzBaze);
-            _context.SaveChanges();
-            return new JsonResult(new { poruka = "obrisano" });
-
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Korisnik>>> Get()
-        {
-            var korisnici = await _korisnikService.GetAllKorisniciAsync();
-            var korisniciDto = _mapper.Map<List<Korisnik>>(korisnici);
-            return Ok(korisniciDto);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Korisnik>> Get(int id)
-        {
-            var korisnik = await _korisnikService.GetKorisnikByIdAsync(id);
-            if (korisnik == null)
-                return NotFound("Greška");
-
-            var korisnikDto = _mapper.Map<Korisnik>(korisnik);
-            return Ok(korisnikDto);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<int>> Post(DtoRec.KorisnikDto korisnikDto)
-        {
-            var korisnikId = await _korisnikService.CreateKorisnikAsync(korisnikDto);
-
-            return Ok(korisnikId);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, DtoRec.KorisnikDto korisnikDto)
-        {
-            var result = await _korisnikService.UpdateKorisnikAsync(id, korisnikDto);
-            if (!result)
-                return NotFound("Greška");
-
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var result = await _korisnikService.DeleteKorisnikAsync(id);
-            if (!result)
-                return NotFound("Greška");
-
-            return NoContent();
-        }
     }
+
 }

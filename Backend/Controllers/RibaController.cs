@@ -1,77 +1,42 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
     [ApiController]
-    [Route("app/v1/[controller]")]
-
-    public class RibaController : ControllerBase
+    [Route("api/v1/[controller]")]
+    public class RibaController : UniverzalniController<Riba, RibaDTORead, RibaDTOInsertUpdate>
     {
-     
-        //dependency injection
-        //privatno svojstvo
-
-        private readonly RibolovniDnevnikContext _context;
-
-        //u  konstruktoru primimo instancu i djdelimo privatnom svojstvu
-
-        public RibaController (RibolovniDnevnikContext context) { _context = context; }
-        [HttpGet]
-
-        public IActionResult Get()
+        public RibaController(RibolovniDnevnikContext context) : base(context)
         {
-            return new JsonResult(_context.Ribe.ToList());
+            DbSet = _context.Ribe;
         }
-
-        [HttpPost]
-        public IActionResult Post(Riba riba)
+        protected override void KontrolaBrisanje(Riba entitet)
         {
-            _context.Ribe.Add(riba);
-            _context.SaveChanges();
+            var lista = _context.Ulovi
+                                .Include(x => x.Riba)
 
-
-            return new JsonResult(riba);
+                .Where(x => x.Riba.id == entitet.id)
+                .ToList();
+            if (lista != null && lista.Count > 0)
+            {
+                StringBuilder sb = new();
+                sb.Append("Riba se ne može obrisati jer je postavljena na Ulovu: ");
+                foreach (var e in lista)
+                {
+                    sb.Append(e.Riba).Append(", ");
+                }
+                throw new Exception(sb.ToString()[..^2]); // umjesto sb.ToString().Substring(0, sb.ToString().Length - 2)
+            }
         }
-
-        [HttpDelete]
-        [Route("{id:int}")]
-        [Produces("application/json")]
-
-        public IActionResult Delete(int id)
-        {
-            var RibeIzBaze = _context.Ribe.Find(id);
-
-            _context.Ribe.Remove(RibeIzBaze);
-            _context.SaveChanges();
-            return new JsonResult(new  { poruka = "obrisano" });
-
-
-        }
-        [HttpPut]
-        [Route("{id:int}")]
-
-
-        public IActionResult Put(int id ,  Riba riba)
-        {
-            var RibeIzBaze = _context.Ribe.Find(id);
-            RibeIzBaze.Vrsta = riba.Vrsta;
-            
-
-            _context.Ribe.Update(RibeIzBaze);
-            _context.SaveChanges();
-
-
-            return new JsonResult(RibeIzBaze);
-        }
-
-
-
 
     }
 }

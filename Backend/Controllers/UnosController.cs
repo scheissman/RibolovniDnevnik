@@ -1,69 +1,96 @@
 ﻿using Backend.Data;
+using Backend.Mapping;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Backend.Controllers
-{ 
+{
 
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UnosController : ControllerBase
+    public class UnosController : UniverzalniController<Unos, UnosDtoRead, UnosDTOInsertUpdate>
     {
-    private readonly RibolovniDnevnikContext _context;
-    public UnosController(RibolovniDnevnikContext context) { _context = context; }
-    [HttpGet]
+        public UnosController(RibolovniDnevnikContext context) : base(context)
+        {
+            DbSet = _context.Unosi;
+            _mapper = new UnosMapping();
 
-    public IActionResult Get()
-    {
-            var UnosSKorisnicima  = _context.Unosi.Include(u => u.Korisnik).ToList();
-            return new JsonResult(_context.Unosi.ToList());
+
+        }
+        protected override void KontrolaBrisanje(Unos entitet)
+        {
+            var lista = _context.Ulovi
+                .Where(x => x.id == entitet.id)
+                .ToList();
+            if (lista != null && lista.Count > 0)
+            {
+                StringBuilder sb = new();
+                sb.Append("Unos se ne može obrisati jer je postavljen Ulov: ");
+                foreach (var e in lista)
+                {
+                    sb.Append(e).Append(", ");
+                }
+                throw new Exception(sb.ToString()[..^2]); // umjesto sb.ToString().Substring(0, sb.ToString().Length - 2)
+            }
+        }
+
+        protected override List<UnosDtoRead> UcitajSve()
+        {
+            var lista = _context.Unosi
+                    .Include(g => g.Korisnik)
+                    
+                    .ToList();
+            if (lista == null || lista.Count == 0)
+            {
+                throw new Exception("Ne postoje podaci u bazi");
+            }
+            return _mapper.MapReadList(lista);
+        }
+        protected override Unos KreirajEntitet(UnosDTOInsertUpdate dto)
+        {
+            var Korisnik = _context.Korisnici.FirstOrDefault(k => k.id == dto.ImePrezime);
+            if (Korisnik == null)
+            {
+                throw new Exception("Ne postoji korisnik s imenom i prezimenom " + dto.ImePrezime + " u bazi");
+            }
+
+            var entitet = _mapper.MapInsertUpdatedFromDTO(dto);
+            entitet.Korisnik = Korisnik; 
+            entitet.Datum = dto.Datum;
+            entitet.Vodostaj = dto.Vodostaj;
+            entitet.Biljeska = dto.Biljeska;
+
+            return entitet;
+        }
+
+
+
+        protected override Unos NadiEntitet(int id)
+        {
+
+            return _context.Unosi
+                           .Include(i => i.Korisnik)
+                           .FirstOrDefault(x => x.id == id)
+                   ?? throw new Exception("Ne postoji Unos s šifrom " + id + " u bazi");
+        }
+
+        protected override Unos PromjeniEntitet(UnosDTOInsertUpdate dto, Unos entitet)
+        {
+            var Korisnik = _context.Korisnici.Find(dto.ImePrezime) ?? throw new Exception("Ne postoji Korisnik s šifrom " + dto.ImePrezime + " u bazi");
+            // ovdje je možda pametnije ići s ručnim mapiranje
+            entitet.Korisnik = Korisnik;
+            entitet.Datum = dto.Datum;
+            entitet.Vodostaj = dto.Vodostaj;
+            entitet.Biljeska = dto.Biljeska;
+
+            return entitet;
+        }
     }
 
-    [HttpPost]
-    public IActionResult Post(Unos  unos)
-    {
-        _context.Unosi.Add(unos);
-        _context.SaveChanges();
-
-
-        return new JsonResult(unos);
-    }
-
-    [HttpDelete]
-    [Route("{id:int}")]
-    [Produces("application/json")]
-
-    public IActionResult Delete(int id)
-    {
-        var UnosIzBaze = _context.Unosi.Find(id);
-
-        _context.Unosi.Remove(UnosIzBaze);
-        _context.SaveChanges();
-        return new JsonResult(new { poruka = "obrisano" });
-
-
-    }
-    [HttpPut]
-    [Route("{id:int}")]
-
-
-    public IActionResult Put(int id, Unos unos)
-    {
-        var UnosIzBaze = _context.Unosi.Find(id);
-            UnosIzBaze.Korisnik = unos.Korisnik;
-        UnosIzBaze.Vodostaj = unos.Vodostaj;
-        UnosIzBaze.Datum = unos.Datum;
-        UnosIzBaze.Biljeska = unos.Biljeska;
-
-
-        _context.Unosi.Update(UnosIzBaze);
-        _context.SaveChanges();
-
-
-        return new JsonResult(UnosIzBaze);
-    }
-
-
+    
 }
-}
+

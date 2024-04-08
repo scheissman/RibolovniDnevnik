@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Backend.Data;
+using Backend.Mapping;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,70 +13,89 @@ using Microsoft.EntityFrameworkCore;
 namespace Backend.Controllers
 {
     [ApiController]
-    [Route("app/v1/[controller]")]
-
-    public class UlovController : ControllerBase
+    [Route("api/v1/[controller]")]
+    public class UlovController : UniverzalniController<Ulov, UlovDTORead, UlovDtoInsertUpdate>
     {
-        private readonly RibolovniDnevnikContext _context;
-        public UlovController(RibolovniDnevnikContext context) { _context = context; }
-        [HttpGet]
-
-        public IActionResult Get()
+        public UlovController(RibolovniDnevnikContext context) : base(context)
         {
-            var UlovSUnosom = _context.Ulovi.Include(u => u.Unos.Korisnik).ToList();
-            var UlovSRibom = _context.Ulovi.Include(u => u.Riba).ToList();
-
-
-            return new JsonResult(_context.Ulovi.ToList());
-        }
-
-
-        [HttpPost]
-        public IActionResult Post(Ulov ulov)
-        {
-            _context.Ulovi.Add(ulov);
-            _context.SaveChanges();
-
-
-            return new JsonResult(ulov);
-        }
-
-        [HttpDelete]
-        [Route("{id:int}")]
-        [Produces("application/json")]
-
-        public IActionResult Delete(int id)
-        {
-            var UloviIzBaze = _context.Ulovi.Find(id);
-
-            _context.Ulovi.Remove(UloviIzBaze);
-            _context.SaveChanges();
-            return new JsonResult(new { poruka = "obrisano" });
+            DbSet = _context.Ulovi;
+            _mapper = new UlovMapping();
 
 
         }
-        [HttpPut]
-        [Route("{id:int}")]
-
-
-        public IActionResult Put(int id, Ulov ulov)
+        protected override void KontrolaBrisanje(Ulov entitet)
         {
-            var UloviIzBaze = _context.Ulovi.Find(id);
-            UloviIzBaze.Kolicina = ulov.Kolicina;
-            UloviIzBaze.Riba = ulov.Riba;
-            UloviIzBaze.Tezina = ulov.Tezina;
-            UloviIzBaze.Duzina = ulov.Duzina;
-            UloviIzBaze.Unos = ulov.Unos;
+           
+        }
+
+        protected override List<UlovDTORead> UcitajSve()
+        {
+            var lista = _context.Ulovi
+                    .Include(g => g.Riba)
+                    .Include(g => g.Unos)
 
 
-            _context.Ulovi.Update(UloviIzBaze);
-            _context.SaveChanges();
+                    .ToList();
+            if (lista == null || lista.Count == 0)
+            {
+                throw new Exception("Ne postoje podaci u bazi");
+            }
+            return _mapper.MapReadList(lista);
+        }
+        protected override Ulov KreirajEntitet(UlovDtoInsertUpdate dto)
+        {
+            var Unos = _context.Unosi.FirstOrDefault(k => k.id == dto.UlovUnos);
+            if (Unos == null)
+            {
+                throw new Exception("Ne postoji Unos s  id  " + dto.UlovUnos + " u bazi");
+            }
+            var Riba = _context.Ribe.FirstOrDefault(k => k.id == dto.VrstaId);
+            if (Riba == null)
+            {
+                throw new Exception("Ne postoji Riba s  id  " + dto.VrstaId + " u bazi");
+            }
 
+            var entitet = _mapper.MapInsertUpdatedFromDTO(dto);
+            entitet.Riba = Riba;
+            entitet.Unos = Unos;
+            
+            entitet.Tezina = dto.Tezina;
+            entitet.Duzina = dto.Duzina;
+            entitet.Kolicina = dto.Kolicina;
+            entitet.Fotografija = dto.Fotografija;
 
-            return new JsonResult(UloviIzBaze);
+            return entitet;
         }
 
 
 
+        protected override Ulov NadiEntitet(int id)
+        {
+            return _context.Ulovi
+                           .Include(ulov => ulov.Unos)
+                           .Include(ulov => ulov.Riba)
+                           .FirstOrDefault(ulov => ulov.id == id)
+                   ?? throw new Exception("Ne postoji Ulov s šifrom " + id + " u bazi");
+        }
+
+
+        protected override Ulov PromjeniEntitet(UlovDtoInsertUpdate dto, Ulov entitet)
+        {
+            var Unos = _context.Unosi.Find(dto.UlovUnos) ?? throw new Exception("Ne postoji Unos s šifrom " + dto.UlovUnos + " u bazi");
+            // ovdje je možda pametnije ići s ručnim mapiranje
+            var Riba = _context.Ribe.Find(dto.VrstaId) ?? throw new Exception("Ne postoji Riba s šifrom " + dto.VrstaId + " u bazi");
+
+            entitet.Riba = Riba;
+            entitet.Unos = Unos;
+            entitet.Tezina = dto.Tezina;
+            entitet.Duzina = dto.Duzina;
+            entitet.Kolicina = dto.Kolicina;
+            entitet.Fotografija = dto.Fotografija;
+
+            return entitet;
+        }
     }
+
+
+
 }

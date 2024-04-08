@@ -1,7 +1,6 @@
 using Backend.Data;
-using Backend.Services;
+
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +23,7 @@ builder.Services.AddCors(opcije =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddScoped<IKorisnikService, KorisnikService>();
+
 //dodavanje baze podataka
 builder.Services.AddDbContext<RibolovniDnevnikContext>(o =>
 {
