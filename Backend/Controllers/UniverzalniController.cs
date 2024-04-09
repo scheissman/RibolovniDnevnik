@@ -91,7 +91,7 @@ namespace Backend.Controllers
                 _context.Update(entitet);
                 _context.SaveChanges();
 
-                return StatusCode(StatusCodes.Status200OK, _mapper.MapReadToDTO(entitet));
+                return StatusCode(StatusCodes.Status200OK, _mapper.MapInsertUpdateToDTO(entitet));
             }
             catch (Exception ex)
             {
