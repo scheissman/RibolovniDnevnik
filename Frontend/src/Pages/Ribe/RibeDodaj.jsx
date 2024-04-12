@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../constants";
 import RibaService from "../../services/RibaService";
 
-
 export default function RibaDodaj() {
   const navigate = useNavigate();
 
@@ -23,8 +22,7 @@ export default function RibaDodaj() {
     const podaci = new FormData(e.target);
 
     const riba = {
-      vrsta: podaci.get("vsrta"),
-      
+      vrsta: podaci.get("vrsta"),
     };
     //console.log(unos);
     dodaj(riba);
@@ -33,12 +31,10 @@ export default function RibaDodaj() {
   return (
     <Container>
       <Form onSubmit={obradiSubmit}>
-        <Form.Group controlId="riba">
-          <Form.Label>Ime Prezime</Form.Label>
-          <Form.Control type="text" name="riba" />
+        <Form.Group controlId="vrsta">
+          <Form.Label>Vrsta</Form.Label>
+          <Form.Control type="text" name="vrsta" />
         </Form.Group>
-
-        
 
         <br></br>
         <Row>

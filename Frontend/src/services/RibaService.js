@@ -19,10 +19,11 @@ async function post(riba) {
     const response = await httpService.post(naziv, riba);
     console.log(response.data);
     return { greska: false, poruka: response.data };
-  } catch (error) {
-    return { greska: true, poruka: e };
+  } catch (error) { 
+    return { greska: true, poruka: error }; 
   }
 }
+
 
 async function _delete(id) {
   return await httpService
