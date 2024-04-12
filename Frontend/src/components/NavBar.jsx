@@ -13,13 +13,11 @@ export default function NavBar() {
   return (
     <>
       <GornjiNav></GornjiNav>
-      {/* White Container Navbar */}
       <Navbar expand="lg" className="bg-white">
         <Container fluid className="p-0">
-          {/* Navbar content */}
           <Nav className="mx-right">
             <Nav.Link onClick={() => navigate(RoutesNames.HOME)}>
-              Ribolovni Dnevnik
+              Početna
             </Nav.Link>
             <Nav.Link
               target="blank"
@@ -37,9 +35,17 @@ export default function NavBar() {
               >
                 Korisnici
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Ulovi </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Unosi</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">Ribe</NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => navigate(RoutesNames.UNOS_PREGLED)}
+              >
+                Unosi{" "}
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Ulovi</NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => navigate(RoutesNames.RIBA_PREGLED)}
+              >
+                Ribe
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Container>
@@ -47,5 +53,3 @@ export default function NavBar() {
     </>
   );
 }
-
-

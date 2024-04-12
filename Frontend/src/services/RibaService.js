@@ -1,5 +1,5 @@
 import { httpService } from "./HttpService";
-const naziv = "/Korisnik";
+const naziv = "/Riba";
 async function get() {
   return await httpService
     .get(naziv)
@@ -14,9 +14,9 @@ async function get() {
     });
 }
 
-async function post(korisnik) {
+async function post(riba) {
   try {
-    const response = await httpService.post(naziv, korisnik);
+    const response = await httpService.post(naziv, riba);
     console.log(response.data);
     return { greska: false, poruka: response.data };
   } catch (error) {
@@ -48,9 +48,9 @@ async function getById(id) {
     });
 }
 
-async function put(id, korisnik) {
+async function put(id, riba) {
   return await httpService
-    .put(naziv + "/" + id, korisnik)
+    .put(naziv + "/" + id, riba)
     .then((odgovor) => {
       //console.table(odgovor.data);
       return { greska: false, poruka: odgovor.data };
@@ -68,16 +68,3 @@ export default {
   getById,
   put,
 };
-
-// import  {get,obrisi,dodaj,getBySifra,promjeni,dohvatiPorukeAlert } from "./HttpService";
-
-// // ovdje će doći ostale rute koje nisu odrađene u HttpService
-
-// export default{
-//     get,
-//     obrisi,
-//     dodaj,
-//     promjeni,
-//     getBySifra,
-//     dohvatiPorukeAlert
-// };

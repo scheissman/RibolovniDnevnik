@@ -1,12 +1,9 @@
 .gornji_logo {
   background-color: #1986aa;
-  height: 140px;
+  height: 130px;
 }
 
 .donji_logo {
-  
-  
-  
   background-color: #1986aa;
   height: 40px;
 }
@@ -17,19 +14,21 @@
   margin: auto;
 }
 
-
 .donji_logo {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #1986aa; 
-  color: white; 
+  background-color: #1986aa;
+  color: white;
   padding: 20px;
 }
 
-
-.siroko{
+.siroko {
   width: 100%;
 }
 
+
+.labelaAtributa:first-letter, .form-check-label:first-letter {
+  text-transform: uppercase;
+}

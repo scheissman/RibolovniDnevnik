@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 const WeatherWidget = () => {
   useEffect(() => {
-    const script = document.createElement('script');
-    script.id = 'weatherwidget-io-js';
-    script.src = 'https://weatherwidget.io/js/widget.min.js';
+    const script = document.createElement("script");
+    script.id = "weatherwidget-io-js";
+    script.src = "https://weatherwidget.io/js/widget.min.js";
     script.async = true;
     document.body.appendChild(script);
 
@@ -14,7 +14,10 @@ const WeatherWidget = () => {
   }, []);
 
   return (
-    <footer className="weather-widget-footer">
+    <footer
+      className="donji-logo"
+      style={{ padding: "1px", fontSize: "10px" }}
+    >
       <a
         className="weatherwidget-io"
         href="https://forecast7.com/hr/45d5518d70/osijek/"
@@ -23,7 +26,6 @@ const WeatherWidget = () => {
         data-days="3"
         data-theme="original"
       >
-        OSIJEK WEATHER
       </a>
     </footer>
   );

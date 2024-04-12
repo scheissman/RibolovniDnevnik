@@ -1,9 +1,9 @@
-import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
+import React from "react";
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
 import logo from "../components/logo.png";
-import { useNavigate } from 'react-router-dom';
-import WeatherWidget from './WeatherWidget';
+import { useNavigate } from "react-router-dom";
+import WeatherWidget from "./WeatherWidget";
 
 function GornjiNav() {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ function GornjiNav() {
             <img
               src={logo}
               alt="Logo"
+              
               width="auto"
               height="120"
               className="d-inline-block align-top"

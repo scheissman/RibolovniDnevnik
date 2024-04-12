@@ -4,7 +4,7 @@ function BlockExample() {
   return (
     <div className="d-grid gap-2">
       <Button variant="success" size="lg">
-        Dodaj Korisnika
+        Dodaj
       </Button>
     </div>
   );
