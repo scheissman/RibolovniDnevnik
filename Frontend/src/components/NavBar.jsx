@@ -40,11 +40,15 @@ export default function NavBar() {
               >
                 Unosi{" "}
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Ulovi</NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => navigate(RoutesNames.RIBA_PREGLED)}
               >
                 Ribe
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => navigate(RoutesNames.ULOV_PREGLED)}
+              >
+                Ulovi
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>

@@ -1,52 +1,49 @@
 import { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
-import { Table, Button } from "react-bootstrap";
-import BlockExample from "../../components/velikodugackodugme";
+import { Button, Container, Table } from "react-bootstrap";
+import Service from "../../services/KorisnikService";
+import { NumericFormat } from "react-number-format";
+import { GrValidate } from "react-icons/gr";
+import { IoIosAdd } from "react-icons/io";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../constants";
-import RibaService from "../../services/RibaService";
+
 export default function Ribe() {
-  const [ribe, setRibe] = useState([]);
+  const [ribe, setRibe] = useState();
   const navigate = useNavigate();
-  async function getRibe() {
-    try {
-      const response = await RibaService.get();
-      setRibe(response);
-    } catch (error) {
-      console.error("Error :", error);
+
+  async function dohvatiRibe() {
+    const odgovor = await Service.get("Riba");
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+      return;
+    }
+    setRibe(odgovor.podaci);
+  }
+
+  async function obrisi(id) {
+    const odgovor = await Service.obrisi("Riba", id);
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+    if (odgovor.ok) {
+      dohvatiRibe();
     }
   }
   useEffect(() => {
-    getRibe();
+    dohvatiRibe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function obrisiAsync(id) {
-    const odgovor = await RibaService._delete(id);
-    if (odgovor.greska) {
-      console.log(odgovor.poruka);
-      alert("Pogledaj konzolu");
-      return;
-    }
-    getRibe();
-  }
-
-  function obrisi(id) {
-    obrisiAsync(id);
-  }
 
   return (
     <Container>
-      <Link to={RoutesNames.RIBA_NOVI}>
-        <BlockExample></BlockExample>
+      <Link to={RoutesNames.RIBA_NOVI} className="btn btn-success siroko">
+        <IoIosAdd size={25} /> Dodaj
       </Link>
-
       <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Vrsta</th>
 
-            <th>Update</th>
-            <th>Delete</th>
+            <th>Akcija</th>
           </tr>
         </thead>
         <tbody>
@@ -55,19 +52,18 @@ export default function Ribe() {
               <tr key={index}>
                 <td>{riba.vrsta}</td>
 
-                <td>
+                <td className="sredina">
                   <Button
                     variant="primary"
                     onClick={() => {
-                      navigate(`/Riba/${riba.id}`);
+                      navigate(`/riba/${riba.id}`);
                     }}
                   >
-                    Promjeni
+                    <FaEdit size={25} />
                   </Button>
-                </td>
-                <td>
+                  &nbsp;&nbsp;&nbsp;
                   <Button variant="danger" onClick={() => obrisi(riba.id)}>
-                    Obriši
+                    <FaTrash size={25} />
                   </Button>
                 </td>
               </tr>

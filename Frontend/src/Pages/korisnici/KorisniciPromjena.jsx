@@ -1,101 +1,65 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { RoutesNames } from "../../constants";
-import KorisnikService from "../../services/KorisnikService";
 import { useEffect, useState } from "react";
+import { Container, Form } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import Service from "../../services/KorisnikService";
+import { RoutesNames } from "../../constants";
+import InputText from "../../components/InputText";
+import InputCheckbox from "../../components/InputCheckbox";
+import Akcije from "../../components/Akcije";
 
-export default function KorisnikPromjena() {
+export default function KorisniciPromjeni() {
   const navigate = useNavigate();
   const routeParams = useParams();
   const [korisnik, setKorisnik] = useState({});
 
-  async function getKorisnik() {
-    const o = await KorisnikService.getById(routeParams.id);
-    if (o.greska) {
-      console.log(o.poruka);
-      alert("pogledaj konzolu");
+  async function dohvatiKorisnik() {
+    const odgovor = await Service.getBySifra("Korisnik", routeParams.id);
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+      navigate(RoutesNames.KORISNIK_PREGLED);
       return;
     }
-    setKorisnik(o.poruka);
-  }
-
-  async function promjeni(korisnik) {
-    const odgovor = await KorisnikService.put(routeParams.id, korisnik);
-    if (odgovor.greska) {
-      console.log(odgovor.poruka);
-      alert("Pogledaj konzolu");
-      return;
-    }
-    navigate(RoutesNames.KORISNIK_PREGLED);
+    setKorisnik(odgovor.podaci);
   }
 
   useEffect(() => {
-    getKorisnik();
+    dohvatiKorisnik();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function obradiSubmit(e) {
-    // e predstavlja event
+  async function promjeniKorisnik(korisnik) {
+    const odgovor = await Service.promjeni(
+      "Korisnik",
+      routeParams.id,
+      korisnik
+    );
+    if (odgovor.ok) {
+      navigate(RoutesNames.KORISNIK_PREGLED);
+      return;
+    }
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
-
     const podaci = new FormData(e.target);
-
-    const korisnik = {
+    promjeniKorisnik({
       ime: podaci.get("ime"),
       prezime: podaci.get("prezime"),
       email: podaci.get("email"),
-    };
-    //console.log(routeParams.sifra);
-    //console.log(smjer);
-    promjeni(korisnik);
+    });
   }
 
   return (
     <Container>
-      <Form onSubmit={obradiSubmit}>
-        <Form.Group controlId="ime">
-          <Form.Label>Ime</Form.Label>
-          <Form.Control
-            type="text"
-            name="ime"
-            defaultValue={korisnik.ime}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="prezime">
-          <Form.Label>Prezime</Form.Label>
-          <Form.Control
-            type="text"
-            name="prezime"
-            defaultValue={korisnik.prezime}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="text"
-            name="email"
-            defaultValue={korisnik.email}
-          />
-        </Form.Group>
-
-        <hr />
-        <Row>
-          <Col>
-            <Link
-              className="btn btn-danger siroko"
-              to={RoutesNames.KORISNIK_PREGLED}
-            >
-              Odustani
-            </Link>
-          </Col>
-          <Col>
-            <Button className="siroko" variant="primary" type="submit">
-              Promjeni
-            </Button>
-          </Col>
-        </Row>
+      <Form onSubmit={handleSubmit}>
+        <InputText atribut="ime" vrijednost={korisnik.ime} />
+        <InputText atribut="prezime" vrijednost={korisnik.prezime} />
+        <InputText atribut="email" vrijednost={korisnik.email} />
+        <Akcije
+          odustani={RoutesNames.KORISNIK_PREGLED}
+          akcija="Promjeni korisnika"
+        />
       </Form>
     </Container>
   );

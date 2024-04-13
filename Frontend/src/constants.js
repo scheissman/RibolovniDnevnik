@@ -12,6 +12,10 @@ export const RoutesNames = {
   RIBA_PREGLED: "/riba",
   RIBA_PROMJENI: "/riba/:id",
   RIBA_NOVI: "/riba/dodaj",
+
+  ULOV_PREGLED: "/ulov",
+  ULOV_PROMJENI: "/ulov/:id",
+  ULOV_NOVI: "/ulov/dodaj",
 };
 
 export const App = {

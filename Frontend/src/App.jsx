@@ -14,6 +14,10 @@ import KorisnikPromjena from "./Pages/korisnici/KorisniciPromjena";
 import Ribe from "./Pages/Ribe/Ribe";
 import RibeDodaj from "./Pages/Ribe/RibeDodaj";
 import RibePromjena from "./Pages/Ribe/RibePromjena";
+import Ulovi from "./Pages/Ulovi/Ulovi";
+import UloviDodaj from "./Pages/Ulovi/UloviDodaj";
+import UloviPromjena from "./Pages/Ulovi/UloviPromjena";
+
 
 function App() {
   return (
@@ -24,7 +28,10 @@ function App() {
 
         <Route path={RoutesNames.KORISNIK_PREGLED} element={<Korisnici />} />
         <Route path={RoutesNames.KORISNIK_NOVI} element={<KorisniciDodaj />} />
-        <Route path={RoutesNames.KORISNIK_PROMJENI} element={<KorisnikPromjena />} />
+        <Route
+          path={RoutesNames.KORISNIK_PROMJENI}
+          element={<KorisnikPromjena />}
+        />
 
         <Route path={RoutesNames.UNOS_PREGLED} element={<Unosi />} />
         <Route path={RoutesNames.UNOS_PROMJENI} element={<UnosiPromjena />} />
@@ -33,6 +40,10 @@ function App() {
         <Route path={RoutesNames.RIBA_PREGLED} element={<Ribe />} />
         <Route path={RoutesNames.RIBA_PROMJENI} element={<RibePromjena />} />
         <Route path={RoutesNames.RIBA_NOVI} element={<RibeDodaj />} />
+
+        <Route path={RoutesNames.ULOV_PREGLED} element={<Ulovi />} />
+        <Route path={RoutesNames.ULOV_PROMJENI} element={<UloviPromjena />} />
+        <Route path={RoutesNames.ULOV_NOVI} element={<UloviDodaj />} />
 
       </Routes>
       <br></br>

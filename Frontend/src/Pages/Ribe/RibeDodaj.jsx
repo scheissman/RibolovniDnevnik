@@ -1,57 +1,36 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { RoutesNames } from "../../constants";
-import RibaService from "../../services/RibaService";
+import Service from "../../services/KorisnikService";
+import InputText from "../../components/InputText";
+import Akcije from "../../components/Akcije";
 
-export default function RibaDodaj() {
+export default function RibeDodaj() {
   const navigate = useNavigate();
 
-  async function dodaj(riba) {
-    const odgovor = await RibaService.post(riba);
-    if (odgovor.greska) {
-      console.log(odgovor.poruka);
-      alert(odgovor.poruka);
+  async function dodajRiba(riba) {
+    const odgovor = await Service.dodaj("Riba", riba);
+    if (odgovor.ok) {
+      navigate(RoutesNames.RIBA_PREGLED);
       return;
     }
-    navigate(RoutesNames.RIBA_PREGLED);
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
   }
 
-  function obradiSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    //alert('dodajem unos');
     const podaci = new FormData(e.target);
-
-    const riba = {
+    dodajRiba({
       vrsta: podaci.get("vrsta"),
-    };
-    //console.log(unos);
-    dodaj(riba);
+    });
   }
 
   return (
     <Container>
-      <Form onSubmit={obradiSubmit}>
-        <Form.Group controlId="vrsta">
-          <Form.Label>Vrsta</Form.Label>
-          <Form.Control type="text" name="vrsta" />
-        </Form.Group>
+      <Form onSubmit={handleSubmit}>
+        <InputText atribut="vrsta" vrijednost="" />
 
-        <br></br>
-        <Row>
-          <Col sm={6} md={3} lg={3}>
-            <Link
-              className="btn btn-danger siroko"
-              to={RoutesNames.RIBA_PREGLED}
-            >
-              Odustani
-            </Link>
-          </Col>
-          <Col sm={6} md={9} lg={9}>
-            <Button className="siroko" variant="primary" type="submit">
-              Dodaj ribu
-            </Button>
-          </Col>
-        </Row>
+        <Akcije odustani={RoutesNames.RIBA_PREGLED} akcija="Dodaj riba" />
       </Form>
     </Container>
   );

@@ -1,81 +1,53 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { RoutesNames } from "../../constants";
-import RibaService from "../../services/RibaService";
 import { useEffect, useState } from "react";
+import { Container, Form } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import Service from "../../services/KorisnikService";
+import { RoutesNames } from "../../constants";
+import InputText from "../../components/InputText";
+import Akcije from "../../components/Akcije";
 
-export default function RibaPromjena() {
+export default function RibePromjeni() {
   const navigate = useNavigate();
   const routeParams = useParams();
   const [riba, setRiba] = useState({});
 
-  async function getRiba() {
-    const o = await RibaService.getById(routeParams.id);
-    if (o.greska) {
-      console.log(o.poruka);
-      alert("pogledaj konzolu");
+  async function dohvatiRiba() {
+    const odgovor = await Service.getBySifra("Riba", routeParams.id);
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+      navigate(RoutesNames.RIBA_PREGLED);
       return;
     }
-    setRiba(o.poruka);
-  }
-
-  async function promjeni(riba) {
-    const odgovor = await RibaService.put(routeParams.id, riba);
-    if (odgovor.greska) {
-      console.log(odgovor.poruka);
-      alert("Pogledaj konzolu");
-      return;
-    }
-    navigate(RoutesNames.RIBA_PREGLED);
+    setRiba(odgovor.podaci);
   }
 
   useEffect(() => {
-    getRiba();
+    dohvatiRiba();
   }, []);
 
-  function obradiSubmit(e) {
-    // e predstavlja event
+  async function promjeniRiba(riba) {
+    const odgovor = await Service.promjeni("Riba", routeParams.id, riba);
+    if (odgovor.ok) {
+      navigate(RoutesNames.RIBA_PREGLED);
+      return;
+    }
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
-
     const podaci = new FormData(e.target);
-
-    const riba = {
+    promjeniRiba({
       vrsta: podaci.get("vrsta"),
-    };
-    //console.log(routeParams.sifra);
-    //console.log(smjer);
-    promjeni(riba);
+    });
   }
 
   return (
     <Container>
-      <Form onSubmit={obradiSubmit}>
-        <Form.Group controlId="vrsta">
-          <Form.Label>Vrsta</Form.Label>
-          <Form.Control
-            type="text"
-            name="vrsta"
-            defaultValue={riba.vrsta}
-            required
-          />
-        </Form.Group>
+      <Form onSubmit={handleSubmit}>
+        <InputText atribut="vrsta" vrijednost={riba.vrsta} />
 
-        <hr />
-        <Row>
-          <Col>
-            <Link
-              className="btn btn-danger siroko"
-              to={RoutesNames.RIBA_PREGLED}
-            >
-              Odustani
-            </Link>
-          </Col>
-          <Col>
-            <Button className="siroko" variant="primary" type="submit">
-              Promjeni
-            </Button>
-          </Col>
-        </Row>
+        <Akcije odustani={RoutesNames.RIBA_PREGLED} akcija="Promjeni ribu" />
       </Form>
     </Container>
   );

@@ -1,83 +1,93 @@
 import { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
-import { Table, Button } from "react-bootstrap";
-import BlockExample from "../../components/velikodugackodugme";
-import { Link, useNavigate } from "react-router-dom";
-import { RoutesNames } from "../../constants";
-import UnosService from "../../services/UnosService";
-export default function Unosi() {
-  const [unosi, setUnosi] = useState([]);
-  const navigate = useNavigate();
-  async function getUnosi() {
-    try {
-      const response = await UnosService.get();
-      setUnosi(response);
-    } catch (error) {
-      console.error("Error :", error);
-    }
-  }
-  useEffect(() => {
-    getUnosi();
-  }, []);
+import { Button, Container, Table } from "react-bootstrap";
+import { IoIosAdd } from "react-icons/io";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ProgressBar from "react-bootstrap/ProgressBar";
+import moment from "moment";
 
-  async function obrisiAsync(id) {
-    const odgovor = await UnosService._delete(id);
-    if (odgovor.greska) {
-      console.log(odgovor.poruka);
-      alert("Pogledaj konzolu");
+import Service from "../../services/UnosService";
+import { RoutesNames } from "../../constants";
+
+export default function Unos() {
+  const [unosi, setUnosi] = useState();
+  let navigate = useNavigate();
+
+  async function dohvatiUnose() {
+    const odgovor = await Service.get("Unos");
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
     }
-    getUnosi();
+    setUnosi(odgovor.podaci);
   }
 
-  function obrisi(id) {
-    obrisiAsync(id);
+  async function obrisiUnos(id) {
+    const odgovor = await Service.obrisi("Unos", id);
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+    if (odgovor.ok) {
+      dohvatiUnose();
+    }
+  }
+
+  useEffect(() => {
+    dohvatiUnose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function formatirajDatum(datumpocetka) {
+    let mdp = moment.utc(datumpocetka);
+    if (mdp.hour() == 0 && mdp.minutes() == 0) {
+      return mdp.format("DD. MM. YYYY.");
+    }
+    return mdp.format("DD. MM. YYYY. HH:mm");
   }
 
   return (
     <Container>
-      <Link to={RoutesNames.UNOS_NOVI}>
-        <BlockExample></BlockExample>
+      <Link to={RoutesNames.UNOS_NOVI} className="btn btn-success siroko">
+        <IoIosAdd size={25} /> Dodaj
       </Link>
-
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>ImePrezime</th>
-            <th>Datum</th>
+            <th>Ime Prezime</th>
+            <th>Datum </th>
+
             <th>Vodostaj</th>
-            <th>Biljeska</th>
-            <th>Update</th>
-            <th>Delete</th>
-            
-            
+            <th>Bilješka</th>
+            <th>Akcija</th>
           </tr>
         </thead>
         <tbody>
-          {unosi && unosi.map((unos, index) => (
-            <tr key={index}>
-              <td>{unos.imePrezime}</td>
-              <td>{unos.datum}</td>
-              <td>{unos.vodostaj}</td>
-              <td>{unos.biljeska}</td>
+          {unosi &&
+            unosi.map((entitet, index) => (
+              <tr key={index}>
+                <td>{entitet.imePrezime}</td>
+                <td>{entitet.datum}</td>
+                <td>{entitet.vodostaj}</td>
+                <td>{entitet.biljeska}</td>
 
-              <td>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    navigate(`/Unos/${unos.id}`);
-                  }}
-                >
-                  Promjeni
-                </Button>
-              </td>
-              <td>
-                <Button variant="danger" onClick={() => obrisi(unos.id)}>
-                  Obriši
-                </Button>
-              </td>
-            </tr>
-          ))}
+                <td className="sredina">
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      navigate(`/unos/${entitet.id}`);
+                    }}
+                  >
+                    <FaEdit size={25} />
+                  </Button>
+                  &nbsp;&nbsp;&nbsp;
+                  <Button
+                    variant="danger"
+                    onClick={() => obrisiUnos(entitet.id)}
+                  >
+                    <FaTrash size={25} />
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </Container>

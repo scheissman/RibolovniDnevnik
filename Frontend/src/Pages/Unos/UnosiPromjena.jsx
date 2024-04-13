@@ -1,106 +1,109 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Container, Form, FormSelect } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import moment from "moment";
+import Service from "../../services/UnosService";
 import { RoutesNames } from "../../constants";
-import UnosService from "../../services/UnosService";
-import { useEffect, useState } from "react";
+import InputText from "../../components/InputText";
+import Akcije from "../../components/Akcije";
 
-export default function UnosiPromjena() {
+export default function UnosiPromjeni() {
   const navigate = useNavigate();
   const routeParams = useParams();
   const [unos, setUnos] = useState({});
+  const [korisnici, setKorisnici] = useState([]);
+  const [korisnikSifra, setKorisnikSifra] = useState(0);
 
-  async function getUnos() {
-    const o = await UnosService.getById(routeParams.id);
-    if (o.greska) {
-      console.log(o.poruka);
-      alert("pogledaj konzolu");
+  async function dohvatiUnos() {
+    const odgovor = await Service.getBySifra("Unos", routeParams.id);
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
     }
-    setUnos(o.poruka);
+    let unos = odgovor.podaci;
+    setUnos(unos);
+    setKorisnikSifra(unos.korisnikSifra);
   }
 
-  async function promjeni(unos) {
-    const odgovor = await UnosService.put(routeParams.id, unos);
-    if (odgovor.greska) {
-      console.log(odgovor.poruka);
-      alert("Pogledaj konzolu");
+  async function dohvatiKorisnici() {
+    const odgovor = await Service.get("Korisnik");
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
     }
-    navigate(RoutesNames.UNOS_PREGLED);
+    setKorisnici(odgovor.podaci);
+    setKorisnikSifra(odgovor.podaci[0].sifra);
+  }
+
+  async function dohvatiInicijalnePodatke() {
+    await dohvatiKorisnici();
+    await dohvatiUnos();
   }
 
   useEffect(() => {
-    getUnos();
+    dohvatiInicijalnePodatke();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function obradiSubmit(e) {
-    // e predstavlja event
+  async function promjeni(e) {
+    const odgovor = await Service.promjeni("Unos", routeParams.id, e);
+    if (odgovor.ok) {
+      navigate(RoutesNames.UNOS_PREGLED);
+      return;
+    }
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
 
     const podaci = new FormData(e.target);
+    const datum = moment.utc(podaci.get("datum"));
 
-    const unos = {
-      imeprezime: podaci.get("imeprezime"),
-      datum: podaci.get("datum"),
+    promjeni({
+      imePrezime: parseInt(korisnikSifra),
+      datum: datum,
       vodostaj: podaci.get("vodostaj"),
       biljeska: podaci.get("biljeska"),
-    };
-    //console.log(routeParams.sifra);
-    //console.log(smjer);
-    promjeni(unos);
+    });
   }
 
   return (
-    <Container>
-      <Form onSubmit={obradiSubmit}>
-        <Form.Group controlId="imeprezime">
+    <Container className="mt-4">
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="imePrezime">
           <Form.Label>Ime Prezime</Form.Label>
-          <Form.Control
-            type="text"
-            name="imeprezime"
-            defaultValue={unos.imeprezime}
-            required
-          />
+          <FormSelect
+            multiple={true}
+            onChange={(e) => {
+              setKorisnikSifra(e.target.value);
+            }}
+          >
+            {korisnici &&
+              korisnici.map((s, index) => (
+                <option key={index} value={s.id}>
+                  {s.ime + " " + s.prezime}
+                </option>
+              ))}
+          </FormSelect>
         </Form.Group>
 
-        <Form.Group controlId="datum">
+        <Form.Group className="mb-3" controlId="datum">
           <Form.Label>Datum</Form.Label>
-          <Form.Control type="text" name="datum" defaultValue={unos.datum} />
+          <Form.Control type="date" name="datum" />
         </Form.Group>
 
-        <Form.Group controlId="vodostaj">
+        <Form.Group className="mb-3" controlId="vodostaj">
           <Form.Label>Vodostaj</Form.Label>
-          <Form.Control
-            type="text"
-            name="vodostaj"
-            defaultValue={unos.vodostaj}
-          />
-        </Form.Group>
-        <Form.Group controlId="biljeska">
-          <Form.Label>Biljeska</Form.Label>
-          <Form.Control
-            type="text"
-            name="biljeska"
-            defaultValue={unos.biljeska}
-          />
+          <Form.Control type="text" name="vodostaj" />
         </Form.Group>
 
-        <hr />
-        <Row>
-          <Col>
-            <Link
-              className="btn btn-danger siroko"
-              to={RoutesNames.UNOS_PREGLED}
-            >
-              Odustani
-            </Link>
-          </Col>
-          <Col>
-            <Button className="siroko" variant="primary" type="submit">
-              Promjeni
-            </Button>
-          </Col>
-        </Row>
+        <Form.Group className="mb-3" controlId="biljeska">
+          <Form.Label>Bilješka</Form.Label>
+          <Form.Control type="text" name="biljeska" />
+        </Form.Group>
+
+        <Akcije odustani={RoutesNames.UNOS_PREGLED} akcija="Promjeni unos" />
       </Form>
     </Container>
   );
