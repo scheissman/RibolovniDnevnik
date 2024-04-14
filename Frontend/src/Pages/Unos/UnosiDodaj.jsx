@@ -95,7 +95,7 @@ export default function UnosDodaj() {
   
         <Form.Group className="mb-3" controlId="vodostaj">
           <Form.Label>Vodostaj</Form.Label>
-          <Form.Control type="text" name="vodostaj" />
+          <Form.Control type="number" name="vodostaj" />
         </Form.Group>
   
         <Form.Group className="mb-3" controlId="biljeska">

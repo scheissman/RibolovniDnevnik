@@ -109,17 +109,17 @@ export default function UloviDodaj() {
 
         <Form.Group className="mb-3" controlId="tezina">
           <Form.Label>Težina</Form.Label>
-          <Form.Control type="text" name="tezina" />
+          <Form.Control type="number" name="tezina" />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="duzina">
           <Form.Label>Dužina</Form.Label>
-          <Form.Control type="text" name="duzina" />
+          <Form.Control type="number" name="duzina" />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="kolicina">
           <Form.Label>Količina</Form.Label>
-          <Form.Control type="text" name="kolicina" />
+          <Form.Control type="number" name="kolicina" />
         </Form.Group>
 
         <Form.Group controlId="fotografija" className="mb-3">

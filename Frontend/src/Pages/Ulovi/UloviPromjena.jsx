@@ -121,7 +121,7 @@ export default function UloviPromjeni() {
             <Form.Group className="mb-3" controlId="tezina">
               <Form.Label>težina</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 name="tezina"
                 defaultValue={ulov.tezina}
               />
@@ -130,7 +130,7 @@ export default function UloviPromjeni() {
           <Form.Group className="mb-3" controlId="duzina">
             <Form.Label>dužina</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               name="duzina"
               defaultValue={ulov.duzina}
             />
@@ -138,7 +138,7 @@ export default function UloviPromjeni() {
           <Form.Group className="mb-3" controlId="kolicina">
             <Form.Label>količina</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               name="kolicina"
               defaultValue={ulov.kolicina}
             />
