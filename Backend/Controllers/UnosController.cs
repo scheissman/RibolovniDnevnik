@@ -58,10 +58,17 @@ namespace Backend.Controllers
                 throw new Exception("Ne postoji korisnik s imenom i prezimenom " + dto.ImePrezime + " u bazi");
             }
 
+            var Vodostaj = _context.Unosi.FirstOrDefault(k => k.id == dto.vodostaj)
+            if (Vodostaj == null)
+            {
+                Vodostaj = 0;
+
+            }
+
             var entitet = _mapper.MapInsertUpdatedFromDTO(dto);
             entitet.Korisnik = Korisnik; 
             entitet.Datum = dto.Datum;
-            entitet.Vodostaj = dto.Vodostaj;
+            entitet.Vodostaj = Vodostaj;
             entitet.Biljeska = dto.Biljeska;
 
             return entitet;
@@ -82,9 +89,15 @@ namespace Backend.Controllers
         {
             var Korisnik = _context.Korisnici.Find(dto.ImePrezime) ?? throw new Exception("Ne postoji Korisnik s šifrom " + dto.ImePrezime + " u bazi");
             // ovdje je možda pametnije ići s ručnim mapiranje
+            var Vodostaj = _context.Unosi.FirstOrDefault(k => k.id == dto.vodostaj)
+            if (Vodostaj == null)
+            {
+                Vodostaj = 0;
+
+            }
             entitet.Korisnik = Korisnik;
             entitet.Datum = dto.Datum;
-            entitet.Vodostaj = dto.Vodostaj;
+            entitet.Vodostaj = Vodostaj;
             entitet.Biljeska = dto.Biljeska;
 
             return entitet;

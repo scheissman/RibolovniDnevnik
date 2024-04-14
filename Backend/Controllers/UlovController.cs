@@ -55,13 +55,31 @@ namespace Backend.Controllers
                 throw new Exception("Ne postoji Riba s  id  " + dto.VrstaId + " u bazi");
             }
 
+            var Tezina = _context.Ulovi.FirstOrDefault(k => k.id == dto.tezina)
+            if (Tezina == null)
+            {
+                Tezina = 0;
+
+            }
+            var Duzina = _context.Ulovi.FirstOrDefault(k => k.id == dto.duzina)
+            if (Duzina == null)
+            {
+                Duzina = 0;
+
+            }
+            var Kolicina = _context.Ulovi.FirstOrDefault(k => k.id == dto.kolicina)
+            if (Kolicina == null)
+            {
+                Kolicina = 0;
+
+            }
             var entitet = _mapper.MapInsertUpdatedFromDTO(dto);
             entitet.Riba = Riba;
             entitet.Unos = Unos;
             
-            entitet.Tezina = dto.Tezina;
-            entitet.Duzina = dto.Duzina;
-            entitet.Kolicina = dto.Kolicina;
+            entitet.Tezina = Tezina;
+            entitet.Duzina = Duzina;
+            entitet.Kolicina = Kolicina;
             entitet.Fotografija = dto.Fotografija;
 
             return entitet;
@@ -85,11 +103,31 @@ namespace Backend.Controllers
             // ovdje je možda pametnije ići s ručnim mapiranje
             var Riba = _context.Ribe.Find(dto.VrstaId) ?? throw new Exception("Ne postoji Riba s šifrom " + dto.VrstaId + " u bazi");
 
+
+
+            var Tezina = _context.Ulovi.FirstOrDefault(k => k.id == dto.tezina)
+            if (Tezina == null)
+            {
+                Tezina = 0;
+
+            }
+            var Duzina = _context.Ulovi.FirstOrDefault(k => k.id == dto.duzina)
+            if (Duzina == null)
+            {
+                Duzina = 0;
+
+            }
+            var Kolicina = _context.Ulovi.FirstOrDefault(k => k.id == dto.kolicina)
+            if (Kolicina == null)
+            {
+                Kolicina = 0;
+
+            }
             entitet.Riba = Riba;
             entitet.Unos = Unos;
-            entitet.Tezina = dto.Tezina;
-            entitet.Duzina = dto.Duzina;
-            entitet.Kolicina = dto.Kolicina;
+            entitet.Tezina = Tezina;
+            entitet.Duzina = Duzina;
+            entitet.Kolicina = Kolicina;
             entitet.Fotografija = dto.Fotografija;
 
             return entitet;
