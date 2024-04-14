@@ -59,11 +59,12 @@ export default function UnosiPromjeni() {
 
     const podaci = new FormData(e.target);
     const datum = moment.utc(podaci.get("datum"));
+    const vodostaj = podaci.get("vodostaj") || 0;
 
     promjeni({
       imePrezime: parseInt(korisnikSifra),
       datum: datum,
-      vodostaj: podaci.get("vodostaj"),
+      vodostaj: vodostaj,
       biljeska: podaci.get("biljeska"),
     });
   }

@@ -58,12 +58,13 @@ export default function UnosDodaj() {
         datum = moment.utc(podaci.get("datum"));
       }
     }
+    const vodostaj = podaci.get("vodostaj") || 0;
 
     dodaj({
       imePrezime: parseInt(korisnikSifra),
 
       datum: podaci.get("datum"),
-      vodostaj: podaci.get("vodostaj"),
+      vodostaj: vodostaj,
       biljeska: podaci.get("biljeska"),
     });
   }

@@ -71,12 +71,17 @@ export default function UloviPromjeni() {
   function handleSubmit(e) {
     e.preventDefault();
     const podaci = new FormData(e.target);
+
+    const tezina = podaci.get("tezina") || 0;
+    const duzina = podaci.get("duzina") || 0;
+    const kolicina = podaci.get("kolicina") || 0;
+
     promjeni({
       vrstaId: parseInt(ribaSifra),
       ulovUNos: parseInt(unosSifra),
-      tezina: podaci.get("tezina"),
-      duzina: podaci.get("duzina"),
-      kolicina: podaci.get("kolicina"),
+      tezina: tezina,
+      duzina: duzina,
+      kolicina: kolicina,
       fotografija: podaci.get("fotografija"),
     });
   }
@@ -144,8 +149,6 @@ export default function UloviPromjeni() {
             />
           </Form.Group>
           <InputText atribut="fotografija" vrijednost={ulov.fotografija} />
-
-          
         </Row>
         <Akcije odustani={RoutesNames.ULOV_PREGLED} akcija="Promjeni Ulov" />
       </Form>
