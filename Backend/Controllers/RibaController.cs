@@ -21,21 +21,6 @@ namespace Backend.Controllers
         }
         protected override void KontrolaBrisanje(Riba entitet)
         {
-            var lista = _context.Ulovi
-                                .Include(x => x.Riba)
-
-                .Where(x => x.Riba.id == entitet.id)
-                .ToList();
-            if (lista != null && lista.Count > 0)
-            {
-                StringBuilder sb = new();
-                sb.Append("Riba se ne može obrisati jer je postavljena na Ulovu: ");
-                foreach (var e in lista)
-                {
-                    sb.Append(e.Riba).Append(", ");
-                }
-                throw new Exception(sb.ToString()[..^2]); // umjesto sb.ToString().Substring(0, sb.ToString().Length - 2)
-            }
         }
 
     }
