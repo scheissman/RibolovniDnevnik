@@ -69,42 +69,42 @@ export default function UnosDodaj() {
   }
 
   return (
-    <Container className="mt-4">
-      <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
+      <Container className="mt-4">
         <Form.Group className="mb-3" controlId="imePrezime">
-          <Form.Label>Ime Prezime</Form.Label>
+          <Form.Label>Korisnik</Form.Label>
           <Form.Select
-            multiple={true}
+            value={korisnikSifra}
             onChange={(e) => {
               setKorisnikSifra(e.target.value);
             }}
           >
             {korisnici &&
-              korisnici.map((s, index) => (
-                <option key={index} value={s.id}>
-                  {s.ime + " " + s.prezime}
+              korisnici.map((korisnik, index) => (
+                <option key={index} value={korisnik.id}>
+                  {korisnik.ime + " " + korisnik.prezime}
                 </option>
               ))}
           </Form.Select>
         </Form.Group>
-
+  
         <Form.Group className="mb-3" controlId="datum">
           <Form.Label>Datum</Form.Label>
           <Form.Control type="date" name="datum" />
         </Form.Group>
-
+  
         <Form.Group className="mb-3" controlId="vodostaj">
           <Form.Label>Vodostaj</Form.Label>
           <Form.Control type="text" name="vodostaj" />
         </Form.Group>
-
+  
         <Form.Group className="mb-3" controlId="biljeska">
           <Form.Label>Bilješka</Form.Label>
           <Form.Control type="text" name="biljeska" />
         </Form.Group>
-
+  
         <Akcije odustani={RoutesNames.UNOS_PREGLED} akcija="Dodaj unos" />
-      </Form>
-    </Container>
+      </Container>
+    </Form>
   );
 }

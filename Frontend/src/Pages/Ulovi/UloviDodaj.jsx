@@ -73,35 +73,35 @@ export default function UloviDodaj() {
   return (
     <Container className="mt-4">
       <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="vrstaID">
+        <Form.Group className="mb-3" controlId="vrstaId">
           <Form.Label>Vrsta Ribe</Form.Label>
           <Form.Select
-            multiple={true}
+            value={ribaSifra}
             onChange={(e) => {
               setRibaSifra(e.target.value);
             }}
           >
             {ribe &&
-              ribe.map((s, index) => (
-                <option key={index} value={s.id}>
-                  {s.vrsta}
+              ribe.map((riba, index) => (
+                <option key={index} value={riba.id}>
+                  {riba.vrsta}
                 </option>
               ))}
           </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="ulovUnos">
-          <Form.Label>Ulov-Unos</Form.Label>
+          <Form.Label> Ulov-Unos</Form.Label>
           <Form.Select
-            multiple={true}
+            value={unosSifra}
             onChange={(e) => {
               setUnosSifra(e.target.value);
             }}
           >
             {unosi &&
-              unosi.map((s, index) => (
-                <option key={index} value={s.id}>
-                  {s.id}
+              unosi.map((unos, index) => (
+                <option key={index} value={unos.id}>
+                  {unos.id}
                 </option>
               ))}
           </Form.Select>
@@ -122,11 +122,10 @@ export default function UloviDodaj() {
           <Form.Control type="text" name="kolicina" />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="fotografija">
-          <Form.Label>Fotografija</Form.Label>
-          <Form.Control type="text" name="fotografija" />
+        <Form.Group controlId="fotografija" className="mb-3">
+          <Form.Label>Dodaj fotografiju</Form.Label>
+          <Form.Control type="file" />
         </Form.Group>
-
         <Akcije odustani={RoutesNames.ULOV_PREGLED} akcija="Dodaj ulov" />
       </Form>
     </Container>

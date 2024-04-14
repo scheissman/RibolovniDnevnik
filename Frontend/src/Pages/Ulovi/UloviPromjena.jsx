@@ -119,30 +119,33 @@ export default function UloviPromjeni() {
         <Row>
           <Col>
             <Form.Group className="mb-3" controlId="tezina">
-              <Form.Label>Težina</Form.Label>
-              <Form.Control type="text" name="tezina" />
-            </Form.Group>
+              <Form.Label>težina</Form.Label>
+              <Form.Control
+                type="text"
+                name="tezina"
+                defaultValue={ulov.tezina}
+              />
+            </Form.Group>{" "}
           </Col>
-          <Col>
-            <Form.Group className="mb-3" controlId="duzina">
-              <Form.Label>Dužina</Form.Label>
-              <Form.Control type="text" name="duzina" />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Group className="mb-3" controlId="kolicina">
-              <Form.Label>Količina</Form.Label>
-              <Form.Control type="text" name="kolicina" />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group className="mb-3" controlId="fotografija">
-              <Form.Label>Fotografija</Form.Label>
-              <Form.Control type="text" name="fotografija" />
-            </Form.Group>
-          </Col>
+          <Form.Group className="mb-3" controlId="duzina">
+            <Form.Label>dužina</Form.Label>
+            <Form.Control
+              type="text"
+              name="duzina"
+              defaultValue={ulov.duzina}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="kolicina">
+            <Form.Label>količina</Form.Label>
+            <Form.Control
+              type="text"
+              name="kolicina"
+              defaultValue={ulov.kolicina}
+            />
+          </Form.Group>
+          <InputText atribut="fotografija" vrijednost={ulov.fotografija} />
+
+          
         </Row>
         <Akcije odustani={RoutesNames.ULOV_PREGLED} akcija="Promjeni Ulov" />
       </Form>

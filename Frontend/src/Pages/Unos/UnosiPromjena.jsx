@@ -22,7 +22,7 @@ export default function UnosiPromjeni() {
     }
     let unos = odgovor.podaci;
     setUnos(unos);
-    setKorisnikSifra(unos.korisnikSifra);
+    setKorisnikSifra(unos.imePrezime);
   }
 
   async function dohvatiKorisnici() {
@@ -69,42 +69,48 @@ export default function UnosiPromjeni() {
   }
 
   return (
-    <Container className="mt-4">
-      <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
+      <Container className="mt-4">
         <Form.Group className="mb-3" controlId="imePrezime">
-          <Form.Label>Ime Prezime</Form.Label>
-          <FormSelect
-            multiple={true}
+          <Form.Label>Korisnik</Form.Label>
+
+          <Form.Select
+            value={korisnikSifra}
             onChange={(e) => {
               setKorisnikSifra(e.target.value);
             }}
           >
             {korisnici &&
-              korisnici.map((s, index) => (
-                <option key={index} value={s.id}>
-                  {s.ime + " " + s.prezime}
+              korisnici.map((korisnik, index) => (
+                <option key={index} value={korisnik.id}>
+                  {korisnik.ime + " " + korisnik.prezime}
                 </option>
               ))}
-          </FormSelect>
+          </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="datum">
           <Form.Label>Datum</Form.Label>
-          <Form.Control type="date" name="datum" />
+          <Form.Control
+            type="date"
+            name="datum"
+            defaultValue={moment(unos.datum).format("YYYY-MM-DD")}
+          />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="vodostaj">
-          <Form.Label>Vodostaj</Form.Label>
-          <Form.Control type="text" name="vodostaj" />
-        </Form.Group>
+        <InputText atribut="vodostaj" vrijednost={unos.vodostaj} />
 
         <Form.Group className="mb-3" controlId="biljeska">
-          <Form.Label>Bilješka</Form.Label>
-          <Form.Control type="text" name="biljeska" />
+          <Form.Label>bilješka</Form.Label>
+          <Form.Control
+            type="text"
+            name="biljeska"
+            defaultValue={unos.biljeska}
+          />
         </Form.Group>
 
         <Akcije odustani={RoutesNames.UNOS_PREGLED} akcija="Promjeni unos" />
-      </Form>
-    </Container>
+      </Container>
+    </Form>
   );
 }
