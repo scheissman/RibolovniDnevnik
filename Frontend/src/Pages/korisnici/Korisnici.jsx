@@ -21,7 +21,7 @@ export default function Korisnici() {
     setKorisnici(odgovor.podaci);
   }
 
-  async function obrisiSmjer(sifra) {
+  async function obrisi(sifra) {
     const odgovor = await Service.obrisi("Korisnik", sifra);
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
     if (odgovor.ok) {
