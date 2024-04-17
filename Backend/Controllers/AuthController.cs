@@ -62,8 +62,8 @@ namespace Backend.Controllers
             }
 
             var token = CreateToken(korisnik);
-            return Ok(new { Token = token, User = korisnik });
-        }
+            return Ok(new { Token = token, User = korisnik.id });
+        }              
 
         private string CreateToken(Korisnik korisnik)
         {
