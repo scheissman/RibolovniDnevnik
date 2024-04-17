@@ -18,10 +18,16 @@ import Ulovi from "./Pages/Ulovi/Ulovi";
 import UloviDodaj from "./Pages/Ulovi/UloviDodaj";
 import UloviPromjena from "./Pages/Ulovi/UloviPromjena";
 
-
+import ErrorModal from "./components/ErrorModal";
+import useError from "./hooks/useError.js";
+import useAuthorization from "./hooks/useAuthorization";
+import Login from "./Pages/Login.jsx"
 function App() {
+  const { errors, showErrorModal, hideError } = useError();
+  const { isLoggedIn } = useAuthorization();
   return (
     <>
+      <ErrorModal show={showErrorModal} errors={errors} onHide={hideError} />
       <NavBar />
       <Routes>
         <Route path={RoutesNames.HOME} element={<Pocetna />} />
@@ -45,6 +51,7 @@ function App() {
         <Route path={RoutesNames.ULOV_PROMJENI} element={<UloviPromjena />} />
         <Route path={RoutesNames.ULOV_NOVI} element={<UloviDodaj />} />
 
+        <Route path={RoutesNames.LOGIN} element={<Login />} />
       </Routes>
       <br></br>
       <DonjiNav />
