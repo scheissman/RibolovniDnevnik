@@ -21,7 +21,8 @@ import UloviPromjena from "./Pages/Ulovi/UloviPromjena";
 import ErrorModal from "./components/ErrorModal";
 import useError from "./hooks/useError.js";
 import useAuthorization from "./hooks/useAuthorization";
-import Login from "./Pages/Login.jsx"
+import Login from "./Pages/Login.jsx";
+
 function App() {
   const { errors, showErrorModal, hideError } = useError();
   const { isLoggedIn } = useAuthorization();
@@ -31,27 +32,30 @@ function App() {
       <NavBar />
       <Routes>
         <Route path={RoutesNames.HOME} element={<Pocetna />} />
+        {isLoggedIn ? (
+          <>
+            <Route path={RoutesNames.KORISNIK_PREGLED} element={<Korisnici />} />
+            <Route path={RoutesNames.KORISNIK_NOVI} element={<KorisniciDodaj />} />
+            <Route
+              path={RoutesNames.KORISNIK_PROMJENI}
+              element={<KorisnikPromjena />}
+            />
 
-        <Route path={RoutesNames.KORISNIK_PREGLED} element={<Korisnici />} />
-        <Route path={RoutesNames.KORISNIK_NOVI} element={<KorisniciDodaj />} />
-        <Route
-          path={RoutesNames.KORISNIK_PROMJENI}
-          element={<KorisnikPromjena />}
-        />
+            <Route path={RoutesNames.UNOS_PREGLED} element={<Unosi />} />
+            <Route path={RoutesNames.UNOS_PROMJENI} element={<UnosiPromjena />} />
+            <Route path={RoutesNames.UNOS_NOVI} element={<UnosiDodaj />} />
 
-        <Route path={RoutesNames.UNOS_PREGLED} element={<Unosi />} />
-        <Route path={RoutesNames.UNOS_PROMJENI} element={<UnosiPromjena />} />
-        <Route path={RoutesNames.UNOS_NOVI} element={<UnosiDodaj />} />
+            <Route path={RoutesNames.RIBA_PREGLED} element={<Ribe />} />
+            <Route path={RoutesNames.RIBA_PROMJENI} element={<RibePromjena />} />
+            <Route path={RoutesNames.RIBA_NOVI} element={<RibeDodaj />} />
 
-        <Route path={RoutesNames.RIBA_PREGLED} element={<Ribe />} />
-        <Route path={RoutesNames.RIBA_PROMJENI} element={<RibePromjena />} />
-        <Route path={RoutesNames.RIBA_NOVI} element={<RibeDodaj />} />
-
-        <Route path={RoutesNames.ULOV_PREGLED} element={<Ulovi />} />
-        <Route path={RoutesNames.ULOV_PROMJENI} element={<UloviPromjena />} />
-        <Route path={RoutesNames.ULOV_NOVI} element={<UloviDodaj />} />
-
-        <Route path={RoutesNames.LOGIN} element={<Login />} />
+            <Route path={RoutesNames.ULOV_PREGLED} element={<Ulovi />} />
+            <Route path={RoutesNames.ULOV_PROMJENI} element={<UloviPromjena />} />
+            <Route path={RoutesNames.ULOV_NOVI} element={<UloviDodaj />} />
+          </>
+        ) : (
+          <Route path={RoutesNames.LOGIN} element={<Login />} />
+        )}
       </Routes>
       <br></br>
       <DonjiNav />
