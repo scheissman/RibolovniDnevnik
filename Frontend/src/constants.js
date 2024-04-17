@@ -16,6 +16,8 @@ export const RoutesNames = {
   ULOV_PREGLED: "/ulov",
   ULOV_PROMJENI: "/ulov/:id",
   ULOV_NOVI: "/ulov/dodaj",
+
+  LOGIN: "/login",
 };
 
 export const App = {
