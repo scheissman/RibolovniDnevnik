@@ -16,8 +16,8 @@ export default function NavBar() {
       <Navbar expand="lg" className="bg-white">
         <Container fluid className="p-0">
           <Nav className="mx-right">
-            <Nav.Link onClick={() => navigate(RoutesNames.LOGIN)}>
-              Login
+            <Nav.Link onClick={() => navigate(RoutesNames.HOME)}>
+              Početna
             </Nav.Link>
             <Nav.Link
               target="blank"
