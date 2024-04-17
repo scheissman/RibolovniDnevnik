@@ -2,9 +2,9 @@
 {
     public class Korisnik : Entitet
     {
-        public String? Ime { get; set; }
-        public String? Prezime { get; set; }
-        public String? Email { get; set; }
-
+        public string? Ime { get; set; }
+        public string? Prezime { get; set; }
+        public string? Email { get; set; }
+        public string? PasswordHash { get; set; }
     }
 }

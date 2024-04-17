@@ -1,6 +1,7 @@
 ﻿using Backend.Data;
 using Backend.Mapping;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Backend.Controllers
 
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class UnosController : UniverzalniController<Unos, UnosDtoRead, UnosDTOInsertUpdate>
     {
         public UnosController(RibolovniDnevnikContext context) : base(context)

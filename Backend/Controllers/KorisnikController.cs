@@ -7,21 +7,48 @@ using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers
 {
 
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
+
     public class KorisnikController : UniverzalniController<Korisnik,KorisnikDTORead,KorisnikDTOInsertUpdate>
     {
         public KorisnikController(RibolovniDnevnikContext context) : base(context)
         {
             DbSet = _context.Korisnici;
         }
-        
-        
-        
+
+
+        [HttpGet]
+        [Route("trazi/{uvjet}")]
+        public IActionResult TraziKorisnik(string uvjet)
+        {
+            if (uvjet == null || uvjet.Length < 3)
+            {
+                return BadRequest(ModelState);
+            }
+            uvjet = uvjet.ToLower();
+            try
+            {
+                IEnumerable<Korisnik> query = _context.Korisnici;
+                var niz = uvjet.Split(" ");
+                foreach (var s in uvjet.Split(" "))
+                {
+                    query = query.Where(p => p.Ime.ToLower().Contains(s) || p.Prezime.ToLower().Contains(s));
+                }
+                var polaznici = query.ToList();
+                return new JsonResult(_mapper.MapReadList(polaznici));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
         protected override void KontrolaBrisanje(Korisnik entitet)
         {
             var lista = _context.Unosi

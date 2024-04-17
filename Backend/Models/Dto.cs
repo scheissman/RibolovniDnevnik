@@ -6,6 +6,8 @@ namespace Backend.Models
 
 
     public record KorisnikDTORead(int Id, string Ime, string Prezime, string Email);
+    public record KorisnikDTORegister (string Ime, string Prezime, string Email, string? Password);
+    public record KorisnikDTOLogin( string? Password, string? Email);
 
 
     public record KorisnikDTOInsertUpdate(

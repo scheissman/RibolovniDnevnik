@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Backend.Data;
 using Backend.Mapping;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class UlovController : UniverzalniController<Ulov, UlovDTORead, UlovDtoInsertUpdate>
     {
         public UlovController(RibolovniDnevnikContext context) : base(context)
@@ -27,6 +29,112 @@ namespace Backend.Controllers
         {
            
         }
+
+
+
+        [HttpGet]
+        [Route("Ribe/{idUlova:int}")]
+        public IActionResult GetRibe(int idUlova)
+        {
+            if (!ModelState.IsValid || idUlova <= 0)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var p = _context.Ulovi
+                    .Include(i => i.Riba)
+                    .FirstOrDefault(x => x.id == idUlova);
+                if (p == null)
+                {
+                    return BadRequest("Ne postoji riba s šifrom " + idUlova + " u bazi");
+                }
+                var mapping = new Mapping<Riba, RibaDTORead, RibaDTOInsertUpdate>();
+                return new JsonResult(mapping.MapReadToDTO(p.Riba));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id:int}/dodaj/{ribasifra:int}")]
+        public IActionResult DodajRibu(int id, int ribasifra)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (id <= 0 || ribasifra <= 0)
+            {
+                return BadRequest("Šifra ulova ili ribe nije dobra");
+            }
+            try
+            {
+                var ulov = _context.Ulovi
+                    .Include(g => g.Riba)
+                    .FirstOrDefault(g => g.id == id);
+                if (ulov == null)
+                {
+                    return BadRequest("Ne postoji ulov s šifrom " + id + " u bazi");
+                }
+                var riba = _context.Ribe.Find(ribasifra);
+                if (riba == null)
+                {
+                    return BadRequest("Ne postoji riba s šifrom " + ribasifra + " u bazi");
+                }
+                ulov.Riba= riba;
+                _context.Ulovi.Update(ulov);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                       StatusCodes.Status503ServiceUnavailable,
+                       ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{int:int}/obrisi/{ribasifra:int}")]
+        public IActionResult ObrisiRibu(int id, int ribasifra)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (id <= 0 || ribasifra <= 0)
+            {
+                return BadRequest("Šifra ribe ili ulova nije dobra");
+            }
+            try
+            {
+                var ulov = _context.Ulovi
+                    .Include(g => g.Riba)
+                    .FirstOrDefault(g => g.id == id);
+                if (ulov == null)
+                {
+                    return BadRequest("Ne postoji uilov s šifrom " + id + " u bazi");
+                }
+                var riba = _context.Ribe.Find(ribasifra);
+                if (riba == null)
+                {
+                    return BadRequest("Ne postoji riba s šifrom " + ribasifra + " u bazi");
+                }
+                ulov.Riba= null;
+                _context.Ulovi.Update(ulov);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+        }
+
 
         protected override List<UlovDTORead> UcitajSve()
         {
