@@ -34,13 +34,14 @@ export function AuthorizationProvider({ children }) {
         const response = await AuthorizationService(userData);
         // hideLoading();
         if (response.ok) {
-            localStorage.setItem("Bearer", response.data);
-            setAuthToken(response.data);
+            console.log(response.podaci.token);
+            localStorage.setItem("Bearer", response.podaci.token);
+            setAuthToken(response.podaci.token);
             setIsLoggedIn(true);
             navigate(RoutesNames.HOME);
         } else {
             console.log();
-            showError(response.data);
+            showError(response.podaci);
             localStorage.setItem("Bearer", "");
             setAuthToken("");
             setIsLoggedIn(false);
