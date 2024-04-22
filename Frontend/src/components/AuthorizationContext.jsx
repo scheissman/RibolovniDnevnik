@@ -9,7 +9,6 @@ export const AuthorizationContext = createContext();
 export function AuthorizationProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [authToken, setAuthToken] = useState("");
-    // const { showLoading, hideLoading } = useLoading();
 
     const { showError } = useError();
     const navigate = useNavigate();
@@ -20,6 +19,7 @@ export function AuthorizationProvider({ children }) {
     // u else dijelu štitimo aplikaciju tako da korisnik ne može pristupiti zaštićenim rutama
     useEffect(() => {
         const token = localStorage.getItem("Bearer");
+        const korisnikid = localStorage.getItem("korisnikid");
 
         if (token) {
             setAuthToken(token);
@@ -30,24 +30,36 @@ export function AuthorizationProvider({ children }) {
     }, []);
 
     async function login(userData) {
-        // showLoading();
         const response = await AuthorizationService(userData);
-        // hideLoading();
+    
+        console.log('Full response:', response);
+    
         if (response.ok) {
-            console.log(response.podaci.token);
-            localStorage.setItem("Bearer", response.podaci.token);
-            setAuthToken(response.podaci.token);
+            const korisnikid = response.podaci.korisnikid; 
+            const token = response.podaci.token; 
+    
+            console.log(token);
+            console.log(korisnikid);
+    
+            localStorage.setItem("Bearer", token);
+            localStorage.setItem("korisnikid", korisnikid);
+    
+            setAuthToken(token);
             setIsLoggedIn(true);
-            navigate(RoutesNames.HOME);
+    
+            const navigationURL = `/korisnik/${korisnikid}`;
+
+            console.log('Navigating to:', navigationURL);
+    
+            navigate(navigationURL);
         } else {
-            console.log();
             showError(response.podaci);
             localStorage.setItem("Bearer", "");
             setAuthToken("");
             setIsLoggedIn(false);
         }
     }
-
+    
     function logout() {
         localStorage.setItem("Bearer", "");
         setAuthToken("");
