@@ -58,7 +58,7 @@ namespace Backend.Models
 
     public record UnosDtoRead(
         int? id,
-         string ImePrezime,
+         int ImePrezime,
          DateTime? Datum,
          int? Vodostaj,
          string? Biljeska

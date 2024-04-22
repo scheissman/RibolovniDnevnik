@@ -15,7 +15,6 @@ namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
     public class UlovController : UniverzalniController<Ulov, UlovDTORead, UlovDtoInsertUpdate>
     {
         public UlovController(RibolovniDnevnikContext context) : base(context)

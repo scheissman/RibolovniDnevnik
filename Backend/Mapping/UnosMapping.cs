@@ -15,8 +15,7 @@ namespace Backend.Mapping
                 .ConstructUsing(entitet =>
                  new UnosDtoRead(
                     entitet.id,
-                    entitet.Korisnik == null ? "" : (entitet.Korisnik.Ime
-                        + " " + entitet.Korisnik.Prezime).Trim(),
+                    entitet.Korisnik.id,
                     entitet.Datum ,
                     entitet.Vodostaj,
                     entitet.Biljeska
@@ -33,7 +32,7 @@ namespace Backend.Mapping
                  new UnosDTOInsertUpdate(
                     
                     
-                    entitet.Korisnik == null ? null : entitet.Korisnik.id,
+                    entitet.Korisnik.id,
                     entitet.Datum ,
                     entitet.Vodostaj,
                     entitet.Biljeska));

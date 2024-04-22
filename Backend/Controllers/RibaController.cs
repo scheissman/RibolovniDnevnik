@@ -14,7 +14,6 @@ namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
     public class RibaController : UniverzalniController<Riba, RibaDTORead, RibaDTOInsertUpdate>
     {
         public RibaController(RibolovniDnevnikContext context) : base(context)
