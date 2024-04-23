@@ -57,12 +57,12 @@ namespace Backend.Models
             );
 
     public record UnosDtoRead(
-        int? id,
-         int ImePrezime,
-         DateTime? Datum,
-         int? Vodostaj,
-         string? Biljeska
-    );
+    int? id = null,
+    int ImePrezime = default,
+    DateTime? Datum = null,
+    int? Vodostaj = null,
+    string? Biljeska = null
+);
 
 
 

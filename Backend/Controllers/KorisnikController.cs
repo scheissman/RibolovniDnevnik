@@ -40,8 +40,8 @@ namespace Backend.Controllers
                 {
                     query = query.Where(p => p.Ime.ToLower().Contains(s) || p.Prezime.ToLower().Contains(s));
                 }
-                var polaznici = query.ToList();
-                return new JsonResult(_mapper.MapReadList(polaznici));
+                var korisnici = query.ToList();
+                return new JsonResult(_mapper.MapReadList(korisnici));
             }
             catch (Exception e)
             {

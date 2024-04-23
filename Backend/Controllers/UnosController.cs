@@ -39,6 +39,39 @@ namespace Backend.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/UnosPoKorisniku/{ImePrezime:int}")]
+        public IActionResult GetUnosiByImePrezime(int ImePrezime)
+        {
+            if (ImePrezime <= 0)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var unosiList = _context.Unosi
+                    .Where(u => u.Korisnik.id == ImePrezime)
+                    .Include(u => u.Korisnik)
+                    .ToList();
+
+               
+                if (unosiList == null || unosiList.Count == 0)
+                {
+                    return NotFound($"nema Unosa za korisnika  imePrezime {ImePrezime}");
+                }
+
+                var mapping = new Mapping<Unos, UnosDtoRead, UnosDTOInsertUpdate>();
+                var unosiDtoList = unosiList.Select(u => mapping.MapReadToDTO(u)).ToList();
+
+                return new JsonResult(unosiDtoList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         protected override List<UnosDtoRead> UcitajSve()
         {
             var lista = _context.Unosi
