@@ -39,8 +39,7 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("/UnosPoKorisniku/{ImePrezime:int}")]
+        [HttpGet("UnosPoKorisniku/{ImePrezime:int}")]
         public IActionResult GetUnosiByImePrezime(int ImePrezime)
         {
             if (ImePrezime <= 0)
@@ -55,10 +54,9 @@ namespace Backend.Controllers
                     .Include(u => u.Korisnik)
                     .ToList();
 
-               
                 if (unosiList == null || unosiList.Count == 0)
                 {
-                    return NotFound($"nema Unosa za korisnika  imePrezime {ImePrezime}");
+                    return NotFound($"Nema unosa za korisnika imePrezime {ImePrezime}");
                 }
 
                 var mapping = new Mapping<Unos, UnosDtoRead, UnosDTOInsertUpdate>();
