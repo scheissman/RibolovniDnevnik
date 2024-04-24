@@ -22,6 +22,8 @@ import ErrorModal from "./components/ErrorModal";
 import useError from "./hooks/useError.js";
 import useAuthorization from "./hooks/useAuthorization";
 import Login from "./Pages/Login.jsx";
+import UlovPoKorisniku from "./Pages/Ulovi/UlovPoKorisniku.jsx";
+import Registracija from "./Pages/Registracija.jsx";
 
 function App() {
   const { errors, showErrorModal, hideError } = useError();
@@ -52,9 +54,18 @@ function App() {
             <Route path={RoutesNames.ULOV_PREGLED} element={<Ulovi />} />
             <Route path={RoutesNames.ULOV_PROMJENI} element={<UloviPromjena />} />
             <Route path={RoutesNames.ULOV_NOVI} element={<UloviDodaj />} />
+            <Route
+              path={RoutesNames.ULOVPOKORISNIKU}
+              element={<UlovPoKorisniku />}
+            />
           </>
         ) : (
-          <Route path={RoutesNames.LOGIN} element={<Login />} />
+          <>
+            <Route path={RoutesNames.LOGIN} element={<Login />} />
+            <Route path={RoutesNames.REGISTRACIJA} element={<Registracija />} />
+          </>
+          
+
         )}
       </Routes>
       <br></br>

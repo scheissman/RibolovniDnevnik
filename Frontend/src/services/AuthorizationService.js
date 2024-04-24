@@ -13,3 +13,16 @@ export async function AuthorizationService(userData) {
             };
         });
 }
+export async function register(userData) {
+    return await httpService
+        .post("/Auth/register", userData)
+        .then((res) => {
+            return obradiUspjeh(res);
+        })
+        .catch((error) => {
+            return {
+                error: true,
+                data: [{ property: "Registration", message: error.response.data }],
+            };
+        });
+}

@@ -12,17 +12,19 @@ import { RoutesNames } from "../../constants";
 
 export default function Ulovi(){
     const [ulovi,setUlovi] = useState();
+    const { unosId } = useParams(); 
     let navigate = useNavigate(); 
 
-    async function dohvatiUlove(){
-        const odgovor = await Service.get('Ulov');
-        if(!odgovor.ok){
-            alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+    async function dohvatiUlove() {
+        // Replace the path parameter with a query parameter
+        const response = await Service.get(`Ulov/UlovPoKorisniku?unosid=${unosId}`);
+        if (!response.ok) {
+            alert(Service.dohvatiPorukeAlert(response.podaci));
             return;
         }
-        setUlovi(odgovor.podaci);
+        setUlovi(response.podaci);
     }
-
+    
     async function obrisi(id) {
         const odgovor = await Service.obrisi('Ulov',id);
         alert(Service.dohvatiPorukeAlert(odgovor.podaci));
@@ -34,7 +36,7 @@ export default function Ulovi(){
     useEffect(()=>{
         dohvatiUlove();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+    },[unosId]);
 
 
  

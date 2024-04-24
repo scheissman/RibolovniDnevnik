@@ -3,37 +3,42 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Service from "../../services/UnosService";
 import { RoutesNames } from "../../constants";
-import InputText from "../../components/InputText";
 import Akcije from "../../components/Akcije";
 import moment from "moment";
 
 export default function UnosDodaj() {
   const navigate = useNavigate();
 
-  const [korisnici, setKorisnik] = useState([]);
-  const [korisnikSifra, setKorisnikSifra] = useState(0);
+  // Initialize state variables
+  const [korisnikid, setKorisnikid] = useState(null);
 
-  async function dohvatiKorisnike() {
-    const odgovor = await Service.get("Korisnik");
-    if (!odgovor.ok) {
-      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
-      return;
-    }
-    setKorisnik(odgovor.podaci);
-    setKorisnikSifra(odgovor.podaci[0].id);
-  }
-
-  async function ucitaj() {
-    await dohvatiKorisnike();
-  }
-
+  // Retrieve korisnikid from local storage
   useEffect(() => {
-    ucitaj();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const storedKorisnikid = localStorage.getItem("korisnikid");
+    if (storedKorisnikid) {
+      setKorisnikid(parseInt(storedKorisnikid, 10));
+    }
   }, []);
 
-  async function dodaj(e) {
-    const odgovor = await Service.dodaj("Unos", e);
+  function handleSubmit(e) {
+    e.preventDefault();
+  
+    const podaci = new FormData(e.target);
+    const datum = moment.utc(podaci.get("datum"));
+    const vodostaj = podaci.get("vodostaj") || 0;
+    const biljeska = podaci.get("biljeska");
+  
+    const korisnikid = localStorage.getItem("korisnikid");
+  
+    dodaj({
+      imePrezime: korisnikid, 
+      datum,
+      vodostaj,
+      biljeska,
+    });
+  }
+  async function dodaj(data) {
+    const odgovor = await Service.dodaj("Unos", data);
     if (odgovor.ok) {
       navigate(RoutesNames.UNOS_PREGLED);
       return;
@@ -41,69 +46,24 @@ export default function UnosDodaj() {
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    const podaci = new FormData(e.target);
-
-    if (podaci.get("datum") == "" && podaci.get("vrijeme") != "") {
-      alert("Morate postaviti  datum");
-      return;
-    }
-    let datum = null;
-    if (podaci.get("datum") != "") {
-      if (podaci.get("vrijeme") != "") {
-        datum = moment.utc(podaci.get("datum") + " " + podaci.get("vrijeme"));
-      } else {
-        datum = moment.utc(podaci.get("datum"));
-      }
-    }
-    const vodostaj = podaci.get("vodostaj") || 0;
-
-    dodaj({
-      imePrezime: parseInt(korisnikSifra),
-
-      datum: podaci.get("datum"),
-      vodostaj: vodostaj,
-      biljeska: podaci.get("biljeska"),
-    });
-  }
-
   return (
     <Form onSubmit={handleSubmit}>
       <Container className="mt-4">
-        <Form.Group className="mb-3" controlId="imePrezime">
-          <Form.Label>Korisnik</Form.Label>
-          <Form.Select
-            value={korisnikSifra}
-            onChange={(e) => {
-              setKorisnikSifra(e.target.value);
-            }}
-          >
-            {korisnici &&
-              korisnici.map((korisnik, index) => (
-                <option key={index} value={korisnik.id}>
-                  {korisnik.ime + " " + korisnik.prezime}
-                </option>
-              ))}
-          </Form.Select>
-        </Form.Group>
-  
         <Form.Group className="mb-3" controlId="datum">
           <Form.Label>Datum</Form.Label>
           <Form.Control type="date" name="datum" />
         </Form.Group>
-  
+
         <Form.Group className="mb-3" controlId="vodostaj">
           <Form.Label>Vodostaj</Form.Label>
           <Form.Control type="number" name="vodostaj" />
         </Form.Group>
-  
+
         <Form.Group className="mb-3" controlId="biljeska">
           <Form.Label>Bilješka</Form.Label>
           <Form.Control type="text" name="biljeska" />
         </Form.Group>
-  
+
         <Akcije odustani={RoutesNames.UNOS_PREGLED} akcija="Dodaj unos" />
       </Container>
     </Form>

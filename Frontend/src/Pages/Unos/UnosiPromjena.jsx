@@ -12,7 +12,15 @@ export default function UnosiPromjeni() {
   const routeParams = useParams();
   const [unos, setUnos] = useState({});
   const [korisnici, setKorisnici] = useState([]);
-  const [korisnikSifra, setKorisnikSifra] = useState(0);
+  const [korisnikid, setKorisnikid] = useState(null);
+
+  useEffect(() => {
+    const storedKorisnikid = localStorage.getItem("korisnikid");
+    if (storedKorisnikid) {
+      setKorisnikid(parseInt(storedKorisnikid, 10));
+    }
+    dohvatiInicijalnePodatke();
+  }, []);
 
   async function dohvatiUnos() {
     const odgovor = await Service.getBySifra("Unos", routeParams.id);
@@ -20,9 +28,8 @@ export default function UnosiPromjeni() {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
     }
-    let unos = odgovor.podaci;
+    const unos = odgovor.podaci;
     setUnos(unos);
-    setKorisnikSifra(unos.imePrezime);
   }
 
   async function dohvatiKorisnici() {
@@ -32,18 +39,12 @@ export default function UnosiPromjeni() {
       return;
     }
     setKorisnici(odgovor.podaci);
-    setKorisnikSifra(odgovor.podaci[0].sifra);
   }
 
   async function dohvatiInicijalnePodatke() {
     await dohvatiKorisnici();
     await dohvatiUnos();
   }
-
-  useEffect(() => {
-    dohvatiInicijalnePodatke();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   async function promjeni(e) {
     const odgovor = await Service.promjeni("Unos", routeParams.id, e);
@@ -57,39 +58,22 @@ export default function UnosiPromjeni() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    const podaci = new FormData(e.target);
-    const datum = moment.utc(podaci.get("datum"));
-    const vodostaj = podaci.get("vodostaj") || 0;
+    const formData = new FormData(e.target);
+    const datum = moment.utc(formData.get("datum"));
+    const vodostaj = formData.get("vodostaj") || 0;
+    const biljeska = formData.get("biljeska");
 
     promjeni({
-      imePrezime: parseInt(korisnikSifra),
-      datum: datum,
-      vodostaj: vodostaj,
-      biljeska: podaci.get("biljeska"),
+      imePrezime: korisnikid,
+      datum,
+      vodostaj,
+      biljeska,
     });
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       <Container className="mt-4">
-        <Form.Group className="mb-3" controlId="imePrezime">
-          <Form.Label>Korisnik</Form.Label>
-
-          <Form.Select
-            value={korisnikSifra}
-            onChange={(e) => {
-              setKorisnikSifra(e.target.value);
-            }}
-          >
-            {korisnici &&
-              korisnici.map((korisnik, index) => (
-                <option key={index} value={korisnik.id}>
-                  {korisnik.ime + " " + korisnik.prezime}
-                </option>
-              ))}
-          </Form.Select>
-        </Form.Group>
-
         <Form.Group className="mb-3" controlId="datum">
           <Form.Label>Datum</Form.Label>
           <Form.Control
@@ -102,7 +86,7 @@ export default function UnosiPromjeni() {
         <InputText atribut="vodostaj" vrijednost={unos.vodostaj} />
 
         <Form.Group className="mb-3" controlId="biljeska">
-          <Form.Label>bilješka</Form.Label>
+          <Form.Label>Bilješka</Form.Label>
           <Form.Control
             type="text"
             name="biljeska"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { IoIosAdd } from "react-icons/io";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearchengin } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "react-bootstrap/ProgressBar";
@@ -11,37 +11,39 @@ import Service from "../../services/UnosService";
 import { RoutesNames } from "../../constants";
 
 export default function Unos() {
-  const [unosi, setUnosi] = useState();
-  let navigate = useNavigate();
+  const [unosi, setUnosi] = useState([]);
+  const navigate = useNavigate();
 
-  async function dohvatiUnose() {
-    const odgovor = await Service.get("Unos");
-    if (!odgovor.ok) {
-      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+  const userId = localStorage.getItem("korisnikid");
+  console.log(userId);
+  async function fetchUserUnosi() {
+    const response = await Service.get(`unos/unospokorisniku/${userId}`);
+    if (!response.ok) {
+      alert(Service.dohvatiPorukeAlert(response.podaci));
+      console.log("tu je zapeo");
       return;
     }
-    setUnosi(odgovor.podaci);
+    setUnosi(response.podaci);
   }
 
-  async function obrisiUnos(id) {
-    const odgovor = await Service.obrisi("Unos", id);
-    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
-    if (odgovor.ok) {
-      dohvatiUnose();
+  async function deleteUnos(id) {
+    const response = await Service.obrisi("Unos", id);
+    alert(Service.dohvatiPorukeAlert(response.podaci));
+    if (response.ok) {
+      fetchUserUnosi();
     }
   }
 
   useEffect(() => {
-    dohvatiUnose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchUserUnosi();
   }, []);
 
-  function formatirajDatum(datumpocetka) {
-    let mdp = moment.utc(datumpocetka);
-    if (mdp.hour() == 0 && mdp.minutes() == 0) {
-      return mdp.format("DD. MM. YYYY.");
+  function formatDate(date) {
+    const momentDate = moment.utc(date);
+    if (momentDate.hour() === 0 && momentDate.minutes() === 0) {
+      return momentDate.format("DD. MM. YYYY.");
     }
-    return mdp.format("DD. MM. YYYY. HH:mm");
+    return momentDate.format("DD. MM. YYYY. HH:mm");
   }
 
   return (
@@ -52,9 +54,7 @@ export default function Unos() {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Ime Prezime</th>
-            <th>Datum </th>
-
+            <th>Datum</th>
             <th>Vodostaj</th>
             <th>Bilješka</th>
             <th>Akcija</th>
@@ -62,28 +62,30 @@ export default function Unos() {
         </thead>
         <tbody>
           {unosi &&
-            unosi.map((entitet, index) => (
+            unosi.map((entry, index) => (
               <tr key={index}>
-                <td>{entitet.imePrezime}</td>
-                <td>{entitet.datum}</td>
-                <td>{entitet.vodostaj}</td>
-                <td>{entitet.biljeska}</td>
-
+                <td>{formatDate(entry.datum)}</td>
+                <td>{entry.vodostaj}</td>
+                <td>{entry.biljeska}</td>
                 <td className="sredina">
                   <Button
                     variant="primary"
-                    onClick={() => {
-                      navigate(`/unos/${entitet.id}`);
-                    }}
+                    onClick={() => navigate(`/unos/${entry.id}`)}
                   >
                     <FaEdit size={25} />
                   </Button>
                   &nbsp;&nbsp;&nbsp;
+                  <Button variant="danger" onClick={() => deleteUnos(entry.id)}>
+                    <FaTrash size={25} />
+                  </Button>
+                  &nbsp;&nbsp;&nbsp;
                   <Button
                     variant="danger"
-                    onClick={() => obrisiUnos(entitet.id)}
+                    onClick={() =>
+                      navigate(`${RoutesNames.ULOVPOKORISNIKU}${entry.id}`)
+                    }
                   >
-                    <FaTrash size={25} />
+                    <FaSearchengin size={25} />
                   </Button>
                 </td>
               </tr>
