@@ -26,7 +26,7 @@ namespace Backend.Controllers
         }
         protected override void KontrolaBrisanje(Ulov entitet)
         {
-           
+
         }
 
 
@@ -56,7 +56,7 @@ namespace Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("UlovPoKorisniku")]
+        [HttpGet("UlovPoKorisniku/{unosid:int}")]
         public IActionResult GetUloviByUnosId(int? unosid = null)
         {
             try
@@ -121,7 +121,7 @@ namespace Backend.Controllers
                 {
                     return BadRequest("Ne postoji riba s šifrom " + ribasifra + " u bazi");
                 }
-                ulov.Riba= riba;
+                ulov.Riba = riba;
                 _context.Ulovi.Update(ulov);
                 _context.SaveChanges();
                 return Ok();
@@ -196,7 +196,7 @@ namespace Backend.Controllers
                 {
                     return BadRequest("Ne postoji riba s šifrom " + ribasifra + " u bazi");
                 }
-                ulov.Riba= null;
+                ulov.Riba = null;
                 _context.Ulovi.Update(ulov);
                 _context.SaveChanges();
                 return Ok();
@@ -236,11 +236,11 @@ namespace Backend.Controllers
                 throw new Exception("Ne postoji Riba s  id  " + dto.VrstaId + " u bazi");
             }
 
-          
+
             var entitet = _mapper.MapInsertUpdatedFromDTO(dto);
             entitet.Riba = Riba;
             entitet.Unos = Unos;
-            
+
             entitet.Tezina = dto.Tezina;
             entitet.Duzina = dto.Duzina;
             entitet.Kolicina = dto.Kolicina;
@@ -269,7 +269,7 @@ namespace Backend.Controllers
 
 
 
-        
+
             entitet.Riba = Riba;
             entitet.Unos = Unos;
             entitet.Tezina = dto.Tezina;
