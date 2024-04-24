@@ -32,7 +32,7 @@ namespace Backend.Controllers
 
 
         [HttpGet]
-        [Route("Ribe/{idUlova:int}")]
+        [Route("{idUlova:int}")]
         public IActionResult GetRibe(int idUlova)
         {
             if (!ModelState.IsValid || idUlova <= 0)
@@ -56,7 +56,45 @@ namespace Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("UlovPoKorisniku")]
+        public IActionResult GetUloviByUnosId(int? unosid = null)
+        {
+            try
+            {
+                List<Ulov> uloviList;
 
+                if (unosid.HasValue && unosid.Value > 0)
+                {
+                    // Retrieve Ulovi for the specified Unos ID
+                    uloviList = _context.Ulovi
+                        .Where(u => u.Unos.id == unosid.Value)
+                        .Include(u => u.Riba)
+                        .Include(u => u.Unos)
+                        .ToList();
+                }
+                else
+                {
+                    // Retrieve all Ulovi
+                    uloviList = _context.Ulovi
+                        .Include(u => u.Riba)
+                        .Include(u => u.Unos)
+                        .ToList();
+                }
+
+                if (uloviList == null || uloviList.Count == 0)
+                {
+                    return NotFound($"Nema ulova za korisnika s unosid: {unosid}");
+                }
+
+                var uloviDtoList = uloviList.Select(u => _mapper.MapReadToDTO(u)).ToList();
+
+                return new JsonResult(uloviDtoList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
         [Route("{id:int}/dodaj/{ribasifra:int}")]
         public IActionResult DodajRibu(int id, int ribasifra)
@@ -96,6 +134,42 @@ namespace Backend.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("postaviSliku/{id:int}")]
+        public IActionResult PostaviSliku(int id, SlikaDTO fotografija)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("id mora biti veća od nula (0)");
+            }
+            if (fotografija.Base64 == null || fotografija.Base64?.Length == 0)
+            {
+                return BadRequest("Slika nije postavljena");
+            }
+            var p = _context.Ulovi.Find(id);
+            if (p == null)
+            {
+                return BadRequest("Ne postoji ulov s id " + id + ".");
+            }
+            try
+            {
+                var ds = Path.DirectorySeparatorChar;
+                string dir = Path.Combine(Directory.GetCurrentDirectory()
+                    + ds + "wwwroot" + ds + "slike" + ds + "ulovi");
+
+                if (!System.IO.Directory.Exists(dir))
+                {
+                    System.IO.Directory.CreateDirectory(dir);
+                }
+                var putanja = Path.Combine(dir + ds + id + ".png");
+                System.IO.File.WriteAllBytes(putanja, Convert.FromBase64String(fotografija.Base64));
+                return Ok("Uspješno pohranjena slika");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
         [HttpDelete]
         [Route("{int:int}/obrisi/{ribasifra:int}")]
         public IActionResult ObrisiRibu(int id, int ribasifra)

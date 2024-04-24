@@ -20,7 +20,7 @@ namespace Backend.Mapping
                     entitet.Tezina,
                     entitet.Kolicina,
                     entitet.Duzina,
-                    entitet.Fotografija
+                     PutanjaDatoteke(entitet)
                     ));
             }));
 
@@ -39,9 +39,26 @@ namespace Backend.Mapping
                     entitet.Tezina,
                     entitet.Kolicina,
                     entitet.Duzina,
-                    entitet.Fotografija));
+                     PutanjaDatoteke(entitet)));
             })); ; ;
         }
+
+        private static string PutanjaDatoteke(Ulov e)
+        {
+            try
+            {
+                var ds = Path.DirectorySeparatorChar;
+                string slika = Path.Combine(Directory.GetCurrentDirectory()
+                    + ds + "wwwroot" + ds + "slike" + ds + "polaznici" + ds + e.id + ".png");
+                return File.Exists(slika) ? "/slike/polaznici/" + e.id + ".png" : null;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
     }
 }
 

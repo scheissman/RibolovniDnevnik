@@ -30,17 +30,8 @@ namespace Backend.Models
 
 
 
-    public record UlovDTORead (
-        int? id ,
-        string? VrstaRibe ,
-        int? UlovUnos ,
-        decimal? Tezina,
-        int? Duzina ,
-        int? Kolicina,
-        string? Fotografija);
-
+    public record UlovDTORead(int? id = null, string? VrstaRibe = null, int? UlovUnos = null, decimal? Tezina = null, int? Duzina = null, int? Kolicina = null, string? Fotografija = null );
     
-
 
     public record UlovDtoInsertUpdate(
 
@@ -86,5 +77,6 @@ namespace Backend.Models
 
 
 
+public record SlikaDTO([Required(ErrorMessage = "Base64 zapis slike obavezno")] string Base64);
 
 
