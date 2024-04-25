@@ -17,14 +17,14 @@ export default function UloviDodaj() {
   const [ribaSifra, setRibaSifra] = useState(0);
 
   async function dohvatiUnose() {
-    const odgovor = await Service.get("Unos");
+    const odgovor = await Service.get("Ulov");
     if (!odgovor.ok) {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
     }
     setUnosi(odgovor.podaci);
     setUnosSifra(odgovor.podaci[0].id);
-    console.log(odgovor.podaci[0].id);
+    console.log("ovo su odgvoro podaci" , odgovor.podaci[2].id);
 
   }
   async function dohvatiRibe() {
@@ -50,6 +50,7 @@ export default function UloviDodaj() {
   async function dodaj(e) {
     const odgovor = await Service.dodaj("Ulov", e);
     if (odgovor.ok) {
+      console.log("ovo je unos sifra", unosSifra)
       navigate(`${RoutesNames.ULOVPOKORISNIKU}${unosSifra}`);
       return;
     }
@@ -60,7 +61,7 @@ export default function UloviDodaj() {
     e.preventDefault();
 
     const podaci = new FormData(e.target);
-
+    const ulovUnos = unosSifra;
     const tezina = podaci.get("tezina") || 0;
     const duzina = podaci.get("duzina") || 0;
     const kolicina = podaci.get("kolicina") || 0;

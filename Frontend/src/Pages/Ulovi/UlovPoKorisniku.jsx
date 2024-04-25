@@ -12,6 +12,22 @@ export default function UloviPoKorisniku() {
   const routeparams = useParams();
   const navigate = useNavigate();
 
+
+  const [unosi, setUnosi] = useState([]);
+  const [unosSifra, setUnosSifra] = useState(0);
+
+
+  async function dohvatiUnose() {
+    const odgovor = await Service.get("Unos");
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+      return;
+    }
+    setUnosi(odgovor.podaci);
+    setUnosSifra(odgovor.podaci[0].sifra);
+  }
+
+
   async function dohvatiUlove() {
     "Ulov/UlovPoKorisniku", routeparams.id;
 

@@ -12,7 +12,7 @@ export default function UloviPromjeni() {
   const routeParams = useParams();
   const [ulov, setUlov] = useState({});
   const [unosi, setUnosi] = useState([]);
-  const [unosSifra, setUnosSifra] = useState(0);
+  const [unosSifra, setUnosSifra] = useState();
   const [ribe, setRibe] = useState([]);
   const [ribaSifra, setRibaSifra] = useState(0);
 
@@ -78,7 +78,7 @@ export default function UloviPromjeni() {
 
     promjeni({
       vrstaId: parseInt(ribaSifra),
-      ulovUNos: parseInt(unosSifra),
+      ulovUnos: parseInt(unosSifra),
       tezina: tezina,
       duzina: duzina,
       kolicina: kolicina,
