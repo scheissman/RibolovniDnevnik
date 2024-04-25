@@ -65,7 +65,6 @@ namespace Backend.Controllers
 
                 if (unosid.HasValue && unosid.Value > 0)
                 {
-                    // Retrieve Ulovi for the specified Unos ID
                     uloviList = _context.Ulovi
                         .Where(u => u.Unos.id == unosid.Value)
                         .Include(u => u.Riba)
@@ -74,7 +73,6 @@ namespace Backend.Controllers
                 }
                 else
                 {
-                    // Retrieve all Ulovi
                     uloviList = _context.Ulovi
                         .Include(u => u.Riba)
                         .Include(u => u.Unos)
@@ -133,6 +131,62 @@ namespace Backend.Controllers
                        ex.Message);
             }
         }
+
+        [HttpPut]
+        [Route("PostaviUlovPremaUnosid/{id:int}")]
+        public IActionResult PutUnosUlov(int? unosid=0, int? ribavrsta = 0)
+        {
+            try
+            {
+                List<Ulov> uloviList;
+
+                if (unosid.HasValue && unosid.Value > 0)
+                {
+                    uloviList = _context.Ulovi
+                        .Where(u => u.Unos.id == unosid.Value)
+                        .Include(u => u.Riba)
+                        .Include(u => u.Unos)
+                        .ToList();
+                }
+                else
+                {
+                    uloviList = _context.Ulovi
+                        .Include(u => u.Riba)
+                        .Include(u => u.Unos)
+                        .ToList();
+                }
+
+                if (uloviList == null || uloviList.Count == 0)
+                {
+                    return NotFound($"Nema ulova za korisnika s unosid: {unosid}");
+                }
+
+                var uloviDtoList = uloviList.Select(u => _mapper.MapReadToDTO(u)).ToList();
+
+                return new JsonResult(uloviDtoList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpPut]
         [Route("postaviSliku/{id:int}")]
