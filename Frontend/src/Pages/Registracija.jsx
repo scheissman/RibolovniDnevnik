@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import useAuthorization from "../hooks/useAuthorization";
+import { AuthorizationService, register as registerService } from "../services/AuthorizationService";
+
 
 export default function Registracija() {
   const { register } = useAuthorization();

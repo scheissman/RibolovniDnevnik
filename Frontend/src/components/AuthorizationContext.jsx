@@ -3,7 +3,7 @@ import { AuthorizationService } from "../services/AuthorizationService";
 import { useNavigate } from "react-router-dom";
 import { RoutesNames } from "../constants";
 import useError from "../hooks/useError";
-
+import { register as registerService } from "../services/AuthorizationService";
 export const AuthorizationContext = createContext();
 
 export function AuthorizationProvider({ children }) {
@@ -57,8 +57,11 @@ export function AuthorizationProvider({ children }) {
   }
 
   async function register(userData) {
+    const navigate = useNavigate();
+    const { showError } = useError();
+
     try {
-      const response = await AuthorizationService.register(userData);
+      const response = await registerService(userData);
       console.log("Register response:", response);
 
       if (response.ok) {

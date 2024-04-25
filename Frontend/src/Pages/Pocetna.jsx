@@ -14,7 +14,6 @@ export default function Pocetna() {
             <MyComponent />
           </div>
           <div>
-            <FishingReminderWidget />
           </div>
         </div>
         <WeatherWidget />

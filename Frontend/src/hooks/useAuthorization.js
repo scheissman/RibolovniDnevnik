@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AuthorizationContext } from '../components/AuthorizationContext';
 
+
 export default function useAuth() {
   const context = useContext(AuthorizationContext);
 
