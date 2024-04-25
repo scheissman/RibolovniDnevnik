@@ -20,6 +20,17 @@ async function getByUlov(sifra) {
     });
 }
 
+async function dodajUlovPoKorisniku(sifra,ulov) {
+  return await httpService
+    .get("Ulov/ulovpokorisniku" + sifra)
+    .then((o) => {
+      return { greska: false, poruka: o.data };
+    })
+    .catch((e) => {
+      return { greska: true, poruka: e };
+    });
+}
+
 export default {
   get,
   obrisi,
@@ -28,4 +39,5 @@ export default {
   getBySifra,
   dohvatiPorukeAlert,
   getByUlov,
+  dodajUlovPoKorisniku
 };

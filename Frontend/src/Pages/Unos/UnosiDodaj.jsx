@@ -9,10 +9,8 @@ import moment from "moment";
 export default function UnosDodaj() {
   const navigate = useNavigate();
 
-  // Initialize state variables
   const [korisnikid, setKorisnikid] = useState(null);
 
-  // Retrieve korisnikid from local storage
   useEffect(() => {
     const storedKorisnikid = localStorage.getItem("korisnikid");
     if (storedKorisnikid) {

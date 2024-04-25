@@ -82,7 +82,7 @@ export default function Unos() {
                   <Button
                     variant="danger"
                     onClick={() =>
-                      navigate(`${RoutesNames.ULOVPOKORISNIKU}${entry.id}`)
+                      navigate(`/ulov/ulovpokorisniku/${entry.id}`)
                     }
                   >
                     <FaSearchengin size={25} />

@@ -1,5 +1,5 @@
 import { Container, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Service from "../../services/UlovService";
 import { RoutesNames } from "../../constants";
@@ -9,6 +9,7 @@ import moment from "moment";
 
 export default function UloviDodaj() {
   const navigate = useNavigate();
+  const routeParams = useParams();
 
   const [unosi, setUnosi] = useState([]);
   const [unosSifra, setUnosSifra] = useState(0);
@@ -24,7 +25,6 @@ export default function UloviDodaj() {
     }
     setUnosi(odgovor.podaci);
     setUnosSifra(odgovor.podaci[0].id);
-    console.log("ovo su odgvoro podaci" , odgovor.podaci[2].id);
 
   }
   async function dohvatiRibe() {
@@ -48,10 +48,10 @@ export default function UloviDodaj() {
   }, []);
 
   async function dodaj(e) {
-    const odgovor = await Service.dodaj("Ulov", e);
+    const odgovor = await Service.dodajUlovPoKorisniku(routeParams.id,e );
     if (odgovor.ok) {
       console.log("ovo je unos sifra", unosSifra)
-      navigate(`${RoutesNames.ULOVPOKORISNIKU}${unosSifra}`);
+      navigate(`${RoutesNames.ULOVPOKORISNIKU}/{unosSifra}`);
       return;
     }
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
@@ -115,7 +115,7 @@ export default function UloviDodaj() {
           <Form.Label>Dodaj fotografiju</Form.Label>
           <Form.Control type="file" />
         </Form.Group>
-        <Akcije odustani={RoutesNames.ULOV_PREGLED} akcija="Dodaj ulov" />
+        <Akcije odustani={RoutesNames.ULOVPOKORISNIKU} akcija="Dodaj ulov" />
       </Form>
     </Container>
   );

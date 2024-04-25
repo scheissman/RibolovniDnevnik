@@ -60,7 +60,7 @@ export default function UloviPoKorisniku() {
 
   return (
     <Container>
-      <Link to={RoutesNames.ULOV_NOVI} className="btn btn-success siroko">
+      <Link to={'/ulov/dodaj/'+ routeparams.id} className="btn btn-success siroko">
         <IoIosAdd size={25} /> Dodaj
       </Link>
       <Table striped bordered hover responsive>
