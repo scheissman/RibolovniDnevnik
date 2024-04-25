@@ -133,7 +133,7 @@ namespace Backend.Controllers
         }
 
         [HttpPut]
-        [Route("PostaviUlovPremaUnosid/{id:int}")]
+        [Route("UlovPoKorisniku/{id:int}")]
         public IActionResult PutUnosUlov(int? unosid=0, int? ribavrsta = 0)
         {
             try
