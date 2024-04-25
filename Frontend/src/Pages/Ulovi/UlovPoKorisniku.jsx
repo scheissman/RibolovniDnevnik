@@ -30,6 +30,13 @@ export default function UloviPoKorisniku() {
     console.log("Data fetched:", response.podaci);
     setUlovi(response.podaci);
   }
+  async function obrisi(id) {
+    const odgovor = await Service.obrisi('Ulov',id);
+    alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+    if (odgovor.ok){
+        dohvatiUlove();
+    }
+}
 
   useEffect(() => {
     dohvatiUlove();

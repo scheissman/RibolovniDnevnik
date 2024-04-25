@@ -24,8 +24,9 @@ export default function UloviDodaj() {
     }
     setUnosi(odgovor.podaci);
     setUnosSifra(odgovor.podaci[0].id);
-  }
+    console.log(odgovor.podaci[0].id);
 
+  }
   async function dohvatiRibe() {
     const odgovor = await Service.get("Riba");
     if (!odgovor.ok) {
@@ -49,7 +50,7 @@ export default function UloviDodaj() {
   async function dodaj(e) {
     const odgovor = await Service.dodaj("Ulov", e);
     if (odgovor.ok) {
-      navigate(RoutesNames.ULOV_PREGLED);
+      navigate(`${RoutesNames.ULOVPOKORISNIKU}${unosSifra}`);
       return;
     }
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
@@ -63,7 +64,6 @@ export default function UloviDodaj() {
     const tezina = podaci.get("tezina") || 0;
     const duzina = podaci.get("duzina") || 0;
     const kolicina = podaci.get("kolicina") || 0;
-
 
     dodaj({
       vrstaId: parseInt(ribaSifra),
@@ -90,23 +90,6 @@ export default function UloviDodaj() {
               ribe.map((riba, index) => (
                 <option key={index} value={riba.id}>
                   {riba.vrsta}
-                </option>
-              ))}
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="ulovUnos">
-          <Form.Label> Ulov-Unos</Form.Label>
-          <Form.Select
-            value={unosSifra}
-            onChange={(e) => {
-              setUnosSifra(e.target.value);
-            }}
-          >
-            {unosi &&
-              unosi.map((unos, index) => (
-                <option key={index} value={unos.id}>
-                  {unos.id}
                 </option>
               ))}
           </Form.Select>
