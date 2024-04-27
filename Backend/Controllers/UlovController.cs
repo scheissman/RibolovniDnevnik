@@ -132,49 +132,48 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("UlovPoKorisniku/{id:int}")]
-        public IActionResult PutUnosUlov(int? unosid=0, int? ribavrsta = 0)
+        [HttpPost]
+        [Route("api/v1/ulov/ulovpokorisniku/{unosid:int}")]
+        public IActionResult AddNewUlov(int unosid,  UlovDtoInsertUpdate dto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                List<Ulov> uloviList;
-
-                if (unosid.HasValue && unosid.Value > 0)
-                {
-                    uloviList = _context.Ulovi
-                        .Where(u => u.Unos.id == unosid.Value)
-                        .Include(u => u.Riba)
-                        .Include(u => u.Unos)
-                        .ToList();
-                }
-                else
-                {
-                    uloviList = _context.Ulovi
-                        .Include(u => u.Riba)
-                        .Include(u => u.Unos)
-                        .ToList();
-                }
-
-                if (uloviList == null || uloviList.Count == 0)
-                {
-                    return NotFound($"Nema ulova za korisnika s unosid: {unosid}");
-                }
-
-                var uloviDtoList = uloviList.Select(u => _mapper.MapReadToDTO(u)).ToList();
-
-                return new JsonResult(uloviDtoList);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                return BadRequest(ModelState);
             }
 
+            var unos = _context.Unosi.Find(unosid);
+            if (unos == null)
+            {
+                return NotFound($"Ne postoji unos s id {unosid} u bazi");
+            }
 
+            Ulov ulov = new Ulov
+            {
+                Unos = unos,
+                Tezina = dto.Tezina,
+                Duzina = dto.Duzina,
+                Kolicina = dto.Kolicina,
+                Fotografija = dto.Fotografija
+            };
 
+            var riba = _context.Ribe.Find(dto.VrstaId);
+            if (riba == null)
+            {
+                return NotFound($"Ne postoji riba s id {dto.VrstaId} u bazi");
+            }
 
+            ulov.Riba = riba;
 
+            _context.Ulovi.Add(ulov);
+            _context.SaveChanges();
+
+            return Ok();
         }
+
+
+
+
+
 
 
 
