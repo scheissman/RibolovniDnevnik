@@ -25,7 +25,6 @@ export default function UloviDodaj() {
     }
     setUnosi(odgovor.podaci);
     setUnosSifra(odgovor.podaci[0].id);
-
   }
   async function dohvatiRibe() {
     const odgovor = await Service.get("Riba");
@@ -46,17 +45,16 @@ export default function UloviDodaj() {
     ucitaj();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+console.log("ovo je paramsid broj", routeParams.id);
   async function dodaj(e) {
-    const odgovor = await Service.dodajUlovPoKorisniku(routeParams.id,e );
+    const odgovor = await Service.dodajUlovPoKorisniku(routeParams.id, e);
     if (odgovor.ok) {
-      console.log("ovo je unos sifra", unosSifra)
-      navigate(`${RoutesNames.ULOVPOKORISNIKU}/{unosSifra}`);
+      navigate(`/ulov/ulovpokorisniku/${routeParams.id}`);
       return;
     }
+
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
   }
-
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -68,7 +66,6 @@ export default function UloviDodaj() {
 
     dodaj({
       vrstaId: parseInt(ribaSifra),
-      ulovUnos: parseInt(unosSifra),
       tezina: tezina,
       duzina: duzina,
       kolicina: kolicina,
@@ -113,7 +110,7 @@ export default function UloviDodaj() {
 
         <Form.Group controlId="fotografija" className="mb-3">
           <Form.Label>Dodaj fotografiju</Form.Label>
-          <Form.Control type="file" />
+          <Form.Control type="text" />
         </Form.Group>
         <Akcije odustani={RoutesNames.ULOVPOKORISNIKU} akcija="Dodaj ulov" />
       </Form>

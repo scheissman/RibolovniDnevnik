@@ -12,10 +12,8 @@ export default function UloviPoKorisniku() {
   const routeparams = useParams();
   const navigate = useNavigate();
 
-
   const [unosi, setUnosi] = useState([]);
   const [unosSifra, setUnosSifra] = useState(0);
-
 
   async function dohvatiUnose() {
     const odgovor = await Service.get("Unos");
@@ -26,7 +24,6 @@ export default function UloviPoKorisniku() {
     setUnosi(odgovor.podaci);
     setUnosSifra(odgovor.podaci[0].sifra);
   }
-
 
   async function dohvatiUlove() {
     "Ulov/UlovPoKorisniku", routeparams.id;
@@ -47,12 +44,12 @@ export default function UloviPoKorisniku() {
     setUlovi(response.podaci);
   }
   async function obrisi(id) {
-    const odgovor = await Service.obrisi('Ulov',id);
+    const odgovor = await Service.obrisi("Ulov", id);
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
-    if (odgovor.ok){
-        dohvatiUlove();
+    if (odgovor.ok) {
+      dohvatiUlove();
     }
-}
+  }
 
   useEffect(() => {
     dohvatiUlove();
@@ -60,14 +57,16 @@ export default function UloviPoKorisniku() {
 
   return (
     <Container>
-      <Link to={'/ulov/dodaj/'+ routeparams.id} className="btn btn-success siroko">
+      <Link
+        to={"/ulov/dodaj/" + routeparams.id}
+        className="btn btn-success siroko"
+      >
         <IoIosAdd size={25} /> Dodaj
       </Link>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Vrsta ribe</th>
-            <th>UlovUnos</th>
 
             <th>Težina</th>
             <th>Dužina</th>
@@ -81,7 +80,6 @@ export default function UloviPoKorisniku() {
             ulovi.map((entitet, index) => (
               <tr key={index}>
                 <td>{entitet.vrstaRibe}</td>
-                <td>{entitet.ulovUnos}</td>
 
                 <td>{entitet.tezina}</td>
                 <td>{entitet.duzina}</td>

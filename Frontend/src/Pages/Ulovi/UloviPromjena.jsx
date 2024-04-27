@@ -51,19 +51,28 @@ export default function UloviPromjeni() {
   async function dohvatiInicijalnePodatke() {
     await dohvatiUnose();
     await dohvatiRibe();
-    await dohvatiUlov();
+    const odgovor = await Service.getBySifra("Ulov", routeParams.id);
+    if (!odgovor.ok) {
+      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
+      return;
+    }
+    const grupa = odgovor.podaci;
+    setUlov(grupa);
+    setUnosSifra(grupa.ulovUnos);
+    setRibaSifra(grupa.vrstaId);
   }
-
   useEffect(() => {
     dohvatiInicijalnePodatke();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log("ovoje riba", ribaSifra);
 
+console.log ("ovo je unos sifra", unosSifra)
   async function promjeni(e) {
     const odgovor = await Service.promjeni("Ulov", routeParams.id, e);
     if (odgovor.ok) {
-      navigate(RoutesNames.ULOV_PREGLED);
-      return;
+      navigate(`/ulov/ulovpokorisniku/${unosSifra}`);
+            return;
     }
     alert(Service.dohvatiPorukeAlert(odgovor.podaci));
   }
@@ -75,7 +84,6 @@ export default function UloviPromjeni() {
     const tezina = podaci.get("tezina") || 0;
     const duzina = podaci.get("duzina") || 0;
     const kolicina = podaci.get("kolicina") || 0;
-
     promjeni({
       vrstaId: parseInt(ribaSifra),
       ulovUnos: parseInt(unosSifra),
@@ -105,23 +113,9 @@ export default function UloviPromjeni() {
               ))}
           </Form.Select>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="ulovUnos">
-          <Form.Label>Ulov Unos</Form.Label>
-          <Form.Select
-            value={unosSifra}
-            onChange={(e) => {
-              setUnosSifra(e.target.value);
-            }}
-          >
-            {unosi &&
-              unosi.map((unos, index) => (
-                <option key={index} value={unos.id}>
-                  {unos.id}
-                </option>
-              ))}
-          </Form.Select>
-        </Form.Group>
+      
         <Row>
+          {" "}
           <Col>
             <Form.Group className="mb-3" controlId="tezina">
               <Form.Label>težina</Form.Label>
@@ -150,7 +144,7 @@ export default function UloviPromjeni() {
           </Form.Group>
           <InputText atribut="fotografija" vrijednost={ulov.fotografija} />
         </Row>
-        <Akcije odustani={RoutesNames.ULOV_PREGLED} akcija="Promjeni Ulov" />
+        <Akcije odustani={RoutesNames.ULOVPOKORISNIKU}id = {unosSifra} akcija="Promjeni Ulov" />
       </Form>
     </Container>
   );
