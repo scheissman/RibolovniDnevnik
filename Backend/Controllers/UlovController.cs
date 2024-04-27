@@ -31,31 +31,7 @@ namespace Backend.Controllers
 
 
 
-        [HttpGet]
-        [Route("{idUlova:int}")]
-        public IActionResult GetRibe(int idUlova)
-        {
-            if (!ModelState.IsValid || idUlova <= 0)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                var p = _context.Ulovi
-                    .Include(i => i.Riba)
-                    .FirstOrDefault(x => x.id == idUlova);
-                if (p == null)
-                {
-                    return BadRequest("Ne postoji riba s šifrom " + idUlova + " u bazi");
-                }
-                var mapping = new Mapping<Riba, RibaDTORead, RibaDTOInsertUpdate>();
-                return new JsonResult(mapping.MapReadToDTO(p.Riba));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+      
         [HttpGet("UlovPoKorisniku/{unosid:int}")]
         public IActionResult GetUloviByUnosId(int? unosid = null)
         {
