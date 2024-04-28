@@ -108,43 +108,43 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("ulovpokorisniku/{unosid:int}")]
-        public IActionResult AddNewUlov(int unosid,  UlovDtoInsertUpdate dto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPost]
+        //[Route("ulovpokorisniku/{unosid:int}")]
+        //public IActionResult AddNewUlov(int unosid,  UlovDtoInsertUpdate dto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var unos = _context.Unosi.Find(unosid);
-            if (unos == null)
-            {
-                return NotFound($"Ne postoji unos s id {unosid} u bazi");
-            }
+        //    var unos = _context.Unosi.Find(unosid);
+        //    if (unos == null)
+        //    {
+        //        return NotFound($"Ne postoji unos s id {unosid} u bazi");
+        //    }
 
-            Ulov ulov = new Ulov
-            {
-                Unos = unos,
-                Tezina = dto.Tezina,
-                Duzina = dto.Duzina,
-                Kolicina = dto.Kolicina,
-                Fotografija = dto.Fotografija
-            };
+        //    Ulov ulov = new Ulov
+        //    {
+        //        Unos = unos,
+        //        Tezina = dto.Tezina,
+        //        Duzina = dto.Duzina,
+        //        Kolicina = dto.Kolicina,
+        //        Fotografija = dto.Fotografija
+        //    };
 
-            var riba = _context.Ribe.Find(dto.VrstaId);
-            if (riba == null)
-            {
-                return NotFound($"Ne postoji riba s id {dto.VrstaId} u bazi");
-            }
+        //    var riba = _context.Ribe.Find(dto.VrstaId);
+        //    if (riba == null)
+        //    {
+        //        return NotFound($"Ne postoji riba s id {dto.VrstaId} u bazi");
+        //    }
 
-            ulov.Riba = riba;
+        //    ulov.Riba = riba;
 
-            _context.Ulovi.Add(ulov);
-            _context.SaveChanges();
+        //    _context.Ulovi.Add(ulov);
+        //    _context.SaveChanges();
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
 
 
@@ -308,6 +308,65 @@ namespace Backend.Controllers
 
             return entitet;
         }
+        [HttpPost]
+        [Route("UlovPoKorisniku/{unosid:int}")]
+        public IActionResult UlovDodajSSlikom(int unosid, [FromBody] UlovDtoInsertUpdate dto, [FromForm] SlikaDTO fotografija)
+        {
+            if (unosid <= 0)
+            {
+                return BadRequest("Id mora biti veci od 0");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (fotografija.Base64 == null || fotografija.Base64.Length == 0)
+            {
+                return BadRequest("Nema slike ");
+            }
+
+            
+            var unos = _context.Unosi.Find(unosid);
+            if (unos == null)
+            {
+                return NotFound($"Nema unosa sa id  {unosid} ");
+            }
+
+        
+            Ulov ulov = new Ulov
+            {
+                Unos = unos,
+                Tezina = dto.Tezina,
+                Duzina = dto.Duzina,
+                Kolicina = dto.Kolicina,
+                Fotografija = dto.Fotografija
+            };
+
+            var riba = _context.Ribe.Find(dto.VrstaId);
+            if (riba == null)
+            {
+                return NotFound($"nije nadena vrsta ribe s id  {dto.VrstaId} .");
+            }
+            ulov.Riba = riba;
+
+            _context.Ulovi.Add(ulov);
+            _context.SaveChanges();
+
+            var ds = Path.DirectorySeparatorChar;
+            string dir = Path.Combine(Directory.GetCurrentDirectory()
+                + ds + "wwwroot" + ds + "slike" + ds + "ulovi");
+
+            if (!System.IO.Directory.Exists(dir))
+            {
+                System.IO.Directory.CreateDirectory(dir);
+            }
+            var path = Path.Combine(dir + ds + ulov.id + ".png");
+            System.IO.File.WriteAllBytes(path, Convert.FromBase64String(fotografija.Base64));
+
+            return Ok("Successfully added 'Ulov' with photograph.");
+        }
+
+
     }
 
 
