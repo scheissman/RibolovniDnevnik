@@ -109,7 +109,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/ulov/ulovpokorisniku/{unosid:int}")]
+        [Route("ulovpokorisniku/{unosid:int}")]
         public IActionResult AddNewUlov(int unosid,  UlovDtoInsertUpdate dto)
         {
             if (!ModelState.IsValid)
