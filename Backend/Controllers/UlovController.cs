@@ -363,7 +363,7 @@ namespace Backend.Controllers
             var path = Path.Combine(dir + ds + ulov.id + ".png");
             System.IO.File.WriteAllBytes(path, Convert.FromBase64String(fotografija.Base64));
 
-            return Ok("Successfully added 'Ulov' with photograph.");
+            return Ok("Uspjesno dodan ulov sa slikom .");
         }
 
 

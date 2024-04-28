@@ -20,6 +20,7 @@ namespace Backend.Mapping
                     entitet.Tezina,
                     entitet.Kolicina,
                     entitet.Duzina,
+
                      PutanjaDatoteke(entitet)
                     ));
             }));
@@ -49,8 +50,8 @@ namespace Backend.Mapping
             {
                 var ds = Path.DirectorySeparatorChar;
                 string slika = Path.Combine(Directory.GetCurrentDirectory()
-                    + ds + "wwwroot" + ds + "slike" + ds + "polaznici" + ds + e.id + ".png");
-                return File.Exists(slika) ? "/slike/polaznici/" + e.id + ".png" : null;
+                    + ds + "wwwroot" + ds + "slike" + ds + "ulov" + ds + e.id + ".png");
+                return File.Exists(slika) ? "/slike/ulov/" + e.id + ".png" : null;
             }
             catch
             {
