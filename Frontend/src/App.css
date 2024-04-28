@@ -13,7 +13,10 @@
   max-width: 600px;
   margin: auto;
 }
-
+.slika{
+  max-width: 250px;
+  border: 2px solid black;
+}
 .donji_logo {
   position: fixed;
   bottom: 0;

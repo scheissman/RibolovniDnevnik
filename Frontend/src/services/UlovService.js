@@ -5,6 +5,8 @@ import {
   getBySifra,
   promjeni,
   dohvatiPorukeAlert,
+  obradiUspjeh,
+  obradiGresku,
   httpService,
 } from "./HttpService";
 
@@ -20,14 +22,27 @@ async function getByUlov(sifra) {
       return { greska: true, poruka: e };
     });
 }
+async function postaviSliku(sifra, slika) {
+  return await httpService
+    .put("/ulov/postaviSliku/" + sifra, slika)
+    .then((res) => {
+      return obradiUspjeh(res);
+    })
+    .catch((e) => {
+      return obradiGresku(e);
+    });
+}
 
 async function dodajUlovPoKorisniku(sifra, ulov) {
   try {
-    const response = await httpService.post("Ulov/ulovpokorisniku/" + sifra, ulov);
+    const response = await httpService.post(
+      "Ulov/ulovpokorisniku/" + sifra,
+      ulov
+    );
     return { greska: false, poruka: response.data };
   } catch (e) {
     console.error(e);
-    
+
     return { greska: true, poruka: e };
   }
 }
@@ -41,4 +56,5 @@ export default {
   dohvatiPorukeAlert,
   getByUlov,
   dodajUlovPoKorisniku,
+  postaviSliku,
 };
