@@ -13,6 +13,5 @@ namespace Backend.Models
         public decimal? Tezina { get; set; } = 0; 
         public int? Duzina { get; set; } = 0; 
         public int? Kolicina { get; set; } = 0; 
-        public string? Fotografija { get; set; } = ""; 
     }
 }

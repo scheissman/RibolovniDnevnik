@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Service from "../../services/UlovService";
-import { RoutesNames } from "../../constants";
+import { App, RoutesNames } from "../../constants";
 
 export default function UloviPoKorisniku() {
   const [ulovi, setUlovi] = useState([]);
@@ -89,7 +89,7 @@ export default function UloviPoKorisniku() {
                 <td>{entitet.kolicina}</td>
                 <td>
                   {entitet.fotografija ? (
-                    <img src={entitet.fotografija} alt="Fotografija" />
+                    <img style={{maxHeight: '70px'}} src={App.URL + entitet.fotografija} alt="Fotografija" />
                   ) : (
                     "N/A"
                   )}

@@ -62,26 +62,12 @@ export default function UloviDodaj() {
     const base64Image = croppedCanvas.toDataURL();
     setSlikaZaServer(base64Image);
   }
-  console.log ("ovo su unossifra i ulovsifra", unosSifra);
 
-  async function spremiSliku() {
-    if (!slikaZaServer) {
-      return;
-    }
-
-    const odgovor = await Service.postaviSliku(routeParams.id, {
-      Base64: slikaZaServer.replace("data:image/png;base64,", ""),
-    });
-
-    if (!odgovor.ok) {
-      alert(Service.dohvatiPorukeAlert(odgovor.podaci));
-    }
-  }
 
   async function dodaj(data) {
     const odgovor = await Service.dodajUlovPoKorisniku(routeParams.id, data);
     if (odgovor.ok) {
-      navigate(`${RoutesNames.ULOVPOKORISNIKU}/${unosSifra}`);
+      navigate(nazad());
     } else {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
     }
@@ -89,15 +75,14 @@ export default function UloviDodaj() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    formData.append("fotografija", selectedFile);
+    const podaci = new FormData(e.target);
 
     dodaj({
       vrstaId: parseInt(ribaSifra),
-      tezina: formData.get("tezina") || 0,
-      duzina: formData.get("duzina") || 0,
-      kolicina: formData.get("kolicina") || 0,
-      fotografija: selectedFile,
+      tezina: parseFloat(podaci.get("tezina")) || 0,
+      duzina: parseInt(podaci.get("duzina")) || 0,
+      kolicina: parseInt(podaci.get("kolicina")) || 0,
+      fotografija: slikaZaServer.replace("data:image/png;base64,", ""),
     });
   }
 
@@ -179,9 +164,6 @@ export default function UloviDodaj() {
               />
             )}
 
-            <Button onClick={spremiSliku} disabled={!slikaZaServer}>
-              Spremi Sliku
-            </Button>
 
             <Form.Group controlId="vrstaId" className="mb-3">
               <Form.Label>Vrsta Ribe</Form.Label>

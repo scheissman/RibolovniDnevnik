@@ -39,11 +39,11 @@ async function dodajUlovPoKorisniku(sifra, ulov) {
       "Ulov/ulovpokorisniku/" + sifra,
       ulov
     );
-    return { greska: false, poruka: response.data };
+    return { ok: true, poruka: response.data };
   } catch (e) {
     console.error(e);
 
-    return { greska: true, poruka: e };
+    return { ok: false, poruka: e };
   }
 }
 

@@ -273,7 +273,6 @@ namespace Backend.Controllers
             entitet.Tezina = dto.Tezina;
             entitet.Duzina = dto.Duzina;
             entitet.Kolicina = dto.Kolicina;
-            entitet.Fotografija = dto.Fotografija;
 
             return entitet;
         }
@@ -304,13 +303,12 @@ namespace Backend.Controllers
             entitet.Tezina = dto.Tezina;
             entitet.Duzina = dto.Duzina;
             entitet.Kolicina = dto.Kolicina;
-            entitet.Fotografija = dto.Fotografija;
 
             return entitet;
         }
         [HttpPost]
         [Route("UlovPoKorisniku/{unosid:int}")]
-        public IActionResult UlovDodajSSlikom(int unosid, [FromBody] UlovDtoInsertUpdate dto, [FromForm] SlikaDTO fotografija)
+        public IActionResult UlovDodajSSlikom(int unosid, UlovDtoInsertUpdate dto)
         {
             if (unosid <= 0)
             {
@@ -320,7 +318,7 @@ namespace Backend.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (fotografija.Base64 == null || fotografija.Base64.Length == 0)
+            if (dto.Fotografija == null || dto.Fotografija.Length == 0)
             {
                 return BadRequest("Nema slike ");
             }
@@ -339,7 +337,6 @@ namespace Backend.Controllers
                 Tezina = dto.Tezina,
                 Duzina = dto.Duzina,
                 Kolicina = dto.Kolicina,
-                Fotografija = dto.Fotografija
             };
 
             var riba = _context.Ribe.Find(dto.VrstaId);
@@ -361,7 +358,7 @@ namespace Backend.Controllers
                 System.IO.Directory.CreateDirectory(dir);
             }
             var path = Path.Combine(dir + ds + ulov.id + ".png");
-            System.IO.File.WriteAllBytes(path, Convert.FromBase64String(fotografija.Base64));
+            System.IO.File.WriteAllBytes(path, Convert.FromBase64String(dto.Fotografija));
 
             return Ok("Uspjesno dodan ulov sa slikom .");
         }

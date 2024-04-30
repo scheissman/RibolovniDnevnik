@@ -50,8 +50,8 @@ namespace Backend.Mapping
             {
                 var ds = Path.DirectorySeparatorChar;
                 string slika = Path.Combine(Directory.GetCurrentDirectory()
-                    + ds + "wwwroot" + ds + "slike" + ds + "ulov" + ds + e.id + ".png");
-                return File.Exists(slika) ? "/slike/ulov/" + e.id + ".png" : null;
+                    + ds + "wwwroot" + ds + "slike" + ds + "ulovi" + ds + e.id + ".png");
+                return File.Exists(slika) ? "/slike/ulovi/" + e.id + ".png" : null;
             }
             catch
             {
