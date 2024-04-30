@@ -101,6 +101,10 @@ export default function UloviDodaj() {
     });
   }
 
+  function nazad(){
+    return `/ulov/ulovpokorisniku/${routeParams.id}`
+  }
+
   return (
     <Container className="mt-4">
       <Form onSubmit={handleSubmit} className="form-custom">
@@ -134,7 +138,7 @@ export default function UloviDodaj() {
             </Form.Group>
 
             <Akcije
-              odustani={RoutesNames.ULOVPOKORISNIKU}
+              odustani={nazad()}
               akcija="Dodaj ulov"
             />
           </Col>
