@@ -26,7 +26,7 @@ export default function UloviPoKorisniku() {
   }
 
   async function dohvatiUlove() {
-    "Ulov/UlovPoKorisniku", routeparams.id;
+   // "Ulov/UlovPoKorisniku", routeparams.id;
 
     const response = await Service.getBySifra(
       "Ulov/UlovPoKorisniku",
@@ -79,7 +79,10 @@ export default function UloviPoKorisniku() {
           {ulovi &&
             ulovi.map((entitet, index) => (
               <tr key={index}>
-                <td>{entitet.vrstaRibe}</td>
+                <td>
+                {entitet.id}
+                  <hr />
+                  {entitet.vrstaRibe}</td>
 
                 <td>{entitet.tezina}</td>
                 <td>{entitet.duzina}</td>
@@ -94,7 +97,7 @@ export default function UloviPoKorisniku() {
                 <td className="sredina">
                   <Button
                     variant="primary"
-                    onClick={() => navigate(`/ulov/${entitet.id}`)}
+                    onClick={() => navigate(`/ulov/${entitet.id}/${routeparams.id}`)}
                   >
                     <FaEdit size={25} />
                   </Button>

@@ -94,6 +94,10 @@ console.log ("ovo je unos sifra", unosSifra)
     });
   }
 
+  function nazad(){
+    return `/ulov/ulovpokorisniku/${routeParams.korisnik}`
+  }
+
   return (
     <Container className="mt-4">
       <Form onSubmit={handleSubmit}>
@@ -144,7 +148,7 @@ console.log ("ovo je unos sifra", unosSifra)
           </Form.Group>
           <InputText atribut="fotografija" vrijednost={ulov.fotografija} />
         </Row>
-        <Akcije odustani={RoutesNames.ULOVPOKORISNIKU}id = {unosSifra} akcija="Promjeni Ulov" />
+        <Akcije odustani={nazad()} akcija="Promjeni Ulov" />
       </Form>
     </Container>
   );
