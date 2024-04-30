@@ -80,8 +80,8 @@ export default function UloviPoKorisniku() {
             ulovi.map((entitet, index) => (
               <tr key={index}>
                 <td>
-                {entitet.id}
-                  <hr />
+                
+                  
                   {entitet.vrstaRibe}</td>
 
                 <td>{entitet.tezina}</td>
@@ -89,7 +89,7 @@ export default function UloviPoKorisniku() {
                 <td>{entitet.kolicina}</td>
                 <td>
                   {entitet.fotografija ? (
-                    <img style={{maxHeight: '70px'}} src={App.URL + entitet.fotografija} alt="Fotografija" />
+                    <img style={{maxHeight: '200px'}} src={App.URL + entitet.fotografija} alt="Fotografija" />
                   ) : (
                     "N/A"
                   )}
@@ -97,7 +97,7 @@ export default function UloviPoKorisniku() {
                 <td className="sredina">
                   <Button
                     variant="primary"
-                    onClick={() => navigate(`/ulov/${entitet.id}/${routeparams.id}`)}
+                    onClick={() => navigate(`/ulov/${entitet.id}`)}
                   >
                     <FaEdit size={25} />
                   </Button>
