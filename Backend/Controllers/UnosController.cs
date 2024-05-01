@@ -24,19 +24,7 @@ namespace Backend.Controllers
         }
         protected override void KontrolaBrisanje(Unos entitet)
         {
-            var lista = _context.Ulovi
-                .Where(x => x.id == entitet.id)
-                .ToList();
-            if (lista != null && lista.Count > 0)
-            {
-                StringBuilder sb = new();
-                sb.Append("Unos se ne može obrisati jer je postavljen Ulov: ");
-                foreach (var e in lista)
-                {
-                    sb.Append(e).Append(", ");
-                }
-                throw new Exception(sb.ToString()[..^2]); // umjesto sb.ToString().Substring(0, sb.ToString().Length - 2)
-            }
+            
         }
 
         [HttpGet("UnosPoKorisniku/{ImePrezime:int}")]
