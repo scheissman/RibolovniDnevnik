@@ -68,6 +68,9 @@ export function obradiGresku(e){
     switch(e.response.status){
         case 503:
             return {ok: false, podaci: [kreirajPoruku('Server problem', e.response.data)]};
+        case 404:
+                return { ok: false, podaci: [kreirajPoruku('Nema još niti jednog ulova')] };
+        
         case 400:
             if (typeof(e.response.data.errors) !== 'undefined'){
                 return odradi400(e.response.data.errors);
@@ -87,7 +90,13 @@ function odradi400(e){
 }
 
 function kreirajPoruku(svojstvo, poruka){
-    return {svojstvo: svojstvo, poruka: poruka};
+    if (svojstvo === undefined || poruka === undefined) {
+        return {
+            svojstvo: svojstvo || '',
+            poruka: poruka || ''
+        };
+    }
+    return { svojstvo: svojstvo, poruka: poruka };
 }
 
 export function dohvatiPorukeAlert(podaci){

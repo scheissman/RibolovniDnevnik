@@ -6,9 +6,12 @@ import { RoutesNames } from "../../constants";
 import Akcije from "../../components/Akcije";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import useLoading from '../../hooks/useLoading';
+
 export default function UloviDodaj() {
   const navigate = useNavigate();
   const routeParams = useParams();
+  const { showLoading, hideLoading } = useLoading();
 
   const [unosi, setUnosi] = useState([]);
   const [unosSifra, setUnosSifra] = useState(0);

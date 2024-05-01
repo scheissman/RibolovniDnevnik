@@ -13,6 +13,7 @@ export default function Pocetna() {
           <div>
             <MyComponent />
           </div>
+          <FishingReminderWidget/>
           <div>
           </div>
         </div>
