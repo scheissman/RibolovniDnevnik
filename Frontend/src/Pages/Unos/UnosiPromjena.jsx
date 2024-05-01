@@ -6,6 +6,7 @@ import Service from "../../services/UnosService";
 import { RoutesNames } from "../../constants";
 import InputText from "../../components/InputText";
 import Akcije from "../../components/Akcije";
+import useLoading from '../../hooks/useLoading';
 
 export default function UnosiPromjeni() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function UnosiPromjeni() {
   const [unos, setUnos] = useState({});
   const [korisnici, setKorisnici] = useState([]);
   const [korisnikid, setKorisnikid] = useState(null);
+  const { showLoading, hideLoading } = useLoading();
 
   useEffect(() => {
     const storedKorisnikid = localStorage.getItem("korisnikid");
@@ -23,7 +25,11 @@ export default function UnosiPromjeni() {
   }, []);
 
   async function dohvatiUnos() {
+    showLoading();
+
     const odgovor = await Service.getBySifra("Unos", routeParams.id);
+    hideLoading();
+
     if (!odgovor.ok) {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
@@ -33,7 +39,11 @@ export default function UnosiPromjeni() {
   }
 
   async function dohvatiKorisnici() {
+    showLoading();
+
     const odgovor = await Service.get("Korisnik");
+    hideLoading();
+
     if (!odgovor.ok) {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
@@ -47,7 +57,11 @@ export default function UnosiPromjeni() {
   }
 
   async function promjeni(e) {
+    showLoading();
+
     const odgovor = await Service.promjeni("Unos", routeParams.id, e);
+    hideLoading();
+
     if (odgovor.ok) {
       navigate(RoutesNames.UNOS_PREGLED);
       return;

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import moment from "moment";
+import useLoading from '../../hooks/useLoading';
 
 import Service from "../../services/UnosService";
 import { RoutesNames } from "../../constants";
@@ -13,11 +14,16 @@ import { RoutesNames } from "../../constants";
 export default function Unos() {
   const [unosi, setUnosi] = useState([]);
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
 
   const userId = localStorage.getItem("korisnikid");
   console.log(userId);
   async function fetchUserUnosi() {
+    showLoading();
+
     const response = await Service.get(`unos/unospokorisniku/${userId}`);
+    hideLoading();
+
     if (!response.ok) {
       alert(Service.dohvatiPorukeAlert(response.podaci));
       console.log("tu je zapeo");
@@ -27,7 +33,11 @@ export default function Unos() {
   }
 
   async function deleteUnos(id) {
+    showLoading();
+
     const response = await Service.obrisi("Unos", id);
+    hideLoading();
+
     alert(Service.dohvatiPorukeAlert(response.podaci));
     if (response.ok) {
       fetchUserUnosi();

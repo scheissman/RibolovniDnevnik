@@ -24,6 +24,8 @@ import useAuthorization from "./hooks/useAuthorization";
 import Login from "./Pages/Login.jsx";
 import UlovPoKorisniku from "./Pages/Ulovi/UlovPoKorisniku.jsx";
 import Registracija from "./Pages/Registracija.jsx";
+import LoadingSpinner from './components/LoadingSpinner'
+
 
 function App() {
   const { errors, showErrorModal, hideError } = useError();
@@ -31,6 +33,8 @@ function App() {
   return (
     <>
       <ErrorModal show={showErrorModal} errors={errors} onHide={hideError} />
+      <LoadingSpinner />
+
       <NavBar />
       <Routes>
         <Route path={RoutesNames.HOME} element={<Pocetna />} />

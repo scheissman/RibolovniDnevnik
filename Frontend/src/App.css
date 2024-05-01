@@ -35,3 +35,14 @@
 .labelaAtributa:first-letter, .form-check-label:first-letter {
   text-transform: uppercase;
 }
+
+.loading-spinner-overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

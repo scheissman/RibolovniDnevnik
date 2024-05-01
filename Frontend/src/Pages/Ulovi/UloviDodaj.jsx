@@ -95,6 +95,32 @@ export default function UloviDodaj() {
       <Form onSubmit={handleSubmit} className="form-custom">
         <Row>
           <Col md={6}>
+
+          <Form.Group controlId="vrstaId" className="mb-3">
+              <Form.Label>Vrsta Ribe</Form.Label>
+              <div
+                style={{
+                  maxHeight: "150px",
+                  overflowY: "auto",
+                  border: "1px solid #ccc",
+                }}
+              >
+                {ribe.map((riba, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setRibaSifra(riba.id)}
+                    style={{
+                      padding: "5px",
+                      cursor: "pointer",
+                      backgroundColor:
+                        riba.id === ribaSifra ? "#f0f0f0" : "white",
+                    }}
+                  >
+                    {riba.vrsta}
+                  </div>
+                ))}
+              </div>
+            </Form.Group>
             <Form.Group controlId="tezina" className="mb-3">
               <Form.Label>Težina</Form.Label>
               <Form.Control
@@ -165,31 +191,7 @@ export default function UloviDodaj() {
             )}
 
 
-            <Form.Group controlId="vrstaId" className="mb-3">
-              <Form.Label>Vrsta Ribe</Form.Label>
-              <div
-                style={{
-                  maxHeight: "200px",
-                  overflowY: "auto",
-                  border: "1px solid #ccc",
-                }}
-              >
-                {ribe.map((riba, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setRibaSifra(riba.id)}
-                    style={{
-                      padding: "5px",
-                      cursor: "pointer",
-                      backgroundColor:
-                        riba.id === ribaSifra ? "#f0f0f0" : "white",
-                    }}
-                  >
-                    {riba.vrsta}
-                  </div>
-                ))}
-              </div>
-            </Form.Group>
+            
           </Col>
         </Row>
       </Form>
