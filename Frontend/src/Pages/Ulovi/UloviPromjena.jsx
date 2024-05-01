@@ -6,6 +6,8 @@ import Akcije from '../../components/Akcije';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import useLoading from '../../hooks/useLoading';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+
 
 const BASE_URL = 'https://scheissman-001-site1.ftempurl.com';
 
@@ -23,7 +25,6 @@ export default function UloviPromjeni() {
     const cropperRef = useRef(null);
     const { showLoading, hideLoading } = useLoading();
 
-    // Fetch data for the catch (ulov) and related entities
     async function fetchUlov() {
         showLoading();
 
@@ -43,8 +44,11 @@ export default function UloviPromjeni() {
     }
 
     async function fetchUnosi() {
-        // Fetch entries
+      showLoading();
+
         const response = await Service.get('Unos');
+        hideLoading();
+
         if (!response.ok) {
             alert(Service.dohvatiPorukeAlert(response.podaci));
             return;
@@ -54,8 +58,11 @@ export default function UloviPromjeni() {
     }
 
     async function fetchRibe() {
-        // Fetch fish types
+      showLoading();
+
         const response = await Service.get('Riba');
+        hideLoading();
+
         if (!response.ok) {
             alert(Service.dohvatiPorukeAlert(response.podaci));
             return;
@@ -64,8 +71,9 @@ export default function UloviPromjeni() {
         setRibaSifra(response.podaci[0].sifra);
     }
 
-    // Fetch initial data for the component
     async function fetchInitialData() {
+      showLoading();
+
         await fetchUnosi();
         await fetchRibe();
         await fetchUlov();
@@ -132,30 +140,25 @@ export default function UloviPromjeni() {
                     <Col md={6}>
                         {/* Display fish species list */}
                         <Form.Group controlId="vrstaId" className="mb-3">
-                            <Form.Label>Vrsta Ribe</Form.Label>
-                            <div
-                                style={{
-                                    maxHeight: '200px',
-                                    overflowY: 'auto',
-                                    border: '1px solid #ccc',
-                                }}
-                            >
-                                {ribe.map((riba, index) => (
-                                    <div
-                                        key={index}
-                                        onClick={() => setRibaSifra(riba.id)}
-                                        style={{
-                                            padding: '5px',
-                                            cursor: 'pointer',
-                                            backgroundColor:
-                                                riba.id === ribaSifra ? '#f0f0f0' : 'white',
-                                        }}
-                                    >
-                                        {riba.vrsta}
-                                    </div>
-                                ))}
-                            </div>
-                        </Form.Group>
+    <Form.Label>Vrsta Ribe</Form.Label>
+    <AsyncTypeahead
+        id="riba-typeahead"
+        options={ribe}  
+        labelKey={(riba) => riba.vrsta}  
+        onSearch={(query) => {
+            
+        }}
+        onChange={(selected) => {
+            
+            if (selected.length > 0) {
+                setRibaSifra(selected[0].id);
+            }
+        }}
+        placeholder="Traži vrstu ribe..."
+        minLength={1}  
+    />
+</Form.Group>
+
                         <Form.Group controlId="tezina" className="mb-3">
                             <Form.Label>Težina</Form.Label>
                             <Form.Control
