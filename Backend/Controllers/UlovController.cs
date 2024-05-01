@@ -363,6 +363,60 @@ namespace Backend.Controllers
             return Ok("Uspjesno dodan ulov sa slikom .");
         }
 
+        [HttpPut]
+        [Route("UlovPoKorisniku/{ulovId:int}")]
+        public IActionResult UlovPromjeniSSlikom(int ulovId, UlovDtoInsertUpdate dto)
+        {
+            if (ulovId <= 0)
+            {
+                return BadRequest("Id mora biti cevi od 0.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (dto.Fotografija == null || dto.Fotografija.Length == 0)
+            {
+                return BadRequest("slika nedostaje");
+            }
+
+            var ulov = _context.Ulovi.Find(ulovId);
+            if (ulov == null)
+            {
+                return NotFound($"Nema ulova sa  {ulovId}.");
+            }
+
+            ulov.Tezina = dto.Tezina;
+            ulov.Duzina = dto.Duzina;
+            ulov.Kolicina = dto.Kolicina;
+
+            var riba = _context.Ribe.Find(dto.VrstaId);
+            if (riba == null)
+            {
+                return NotFound($"Nema ribe sa  {dto.VrstaId}.");
+            }
+
+            ulov.Riba = riba;
+
+            _context.SaveChanges();
+
+            var ds = Path.DirectorySeparatorChar;
+            string dir = Path.Combine(Directory.GetCurrentDirectory()
+                + ds + "wwwroot" + ds + "slike" + ds + "ulovi");
+
+            if (!System.IO.Directory.Exists(dir))
+            {
+                System.IO.Directory.CreateDirectory(dir);
+            }
+
+            var path = Path.Combine(dir + ds + ulov.id + ".png");
+            System.IO.File.WriteAllBytes(path, Convert.FromBase64String(dto.Fotografija));
+
+            return Ok("Uspjesno promjenjeno.");
+        }
+
 
     }
 
