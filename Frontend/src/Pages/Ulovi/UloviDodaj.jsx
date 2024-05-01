@@ -105,19 +105,19 @@ export default function UloviDodaj() {
     <Form.Label>Vrsta Ribe</Form.Label>
     <AsyncTypeahead
         id="riba-typeahead"
-        options={ribe}  // The list of fish species
-        labelKey={(riba) => riba.vrsta}  // How to display each option
+        options={ribe}  
+        labelKey={(riba) => riba.vrsta}  
         onSearch={(query) => {
-            // Optionally, you can perform an async search here
+           
         }}
         onChange={(selected) => {
-            // When a fish is selected, set the fish ID (ribaSifra)
+            
             if (selected.length > 0) {
                 setRibaSifra(selected[0].id);
             }
         }}
         placeholder="Traži vrstu ribe..."
-        minLength={1}  // Minimum length of the search query
+        minLength={1}  
     />
 </Form.Group>
 
@@ -173,7 +173,7 @@ export default function UloviDodaj() {
                 viewMode={1}
                 minCropBoxWidth={50}
                 minCropBoxHeight={50}
-                cropBoxResizable={false}
+                cropBoxResizable={true}
                 background={false}
                 responsive={true}
                 checkOrientation={false}

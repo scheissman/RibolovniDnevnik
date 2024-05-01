@@ -110,25 +110,33 @@ export default function UloviPromjeni() {
     }
 
     function handleSubmit(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-
-        const tezina = formData.get('tezina') || 0;
-        const duzina = formData.get('duzina') || 0;
-        const kolicina = formData.get('kolicina') || 0;
-
-        promjeni({
-            vrstaId: parseInt(ribaSifra),
-            ulovUnos: parseInt(unosSifra),
-            tezina: tezina,
-            duzina: duzina,
-            kolicina: kolicina,
-            fotografija: slikaZaServer
-                ? slikaZaServer.replace('data:image/png;base64,', '')
-                : ulov.fotografija,
-        });
-    }
-
+      e.preventDefault();
+      const formData = new FormData();
+  
+      formData.append('vrstaId', ribaSifra);
+      formData.append('ulovUnos', unosSifra);
+      formData.append('tezina', e.target.tezina.value || 0);
+      formData.append('duzina', e.target.duzina.value || 0);
+      formData.append('kolicina', e.target.kolicina.value || 0);
+  
+      // Check and log the image data
+      if (slikaZaServer) {
+          console.log('slikaZaServer:', slikaZaServer);
+          formData.append('fotografija', slikaZaServer.replace('data:image/png;base64,', ''));
+      } else if (ulov.fotografija) {
+          formData.append('fotografija', ulov.fotografija);
+      }
+  
+      // Log formData for debugging
+      for (let pair of formData.entries()) {
+          console.log(pair[0] + ', ' + pair[1]);
+      }
+  
+      // Call `promjeni` with the `formData` object
+      promjeni(formData);
+  }
+  
+  
     function getBackLink() {
         return `/ulov/ulovpokorisniku/${unosSifra}`;
     }
@@ -138,7 +146,6 @@ export default function UloviPromjeni() {
             <Form onSubmit={handleSubmit} className="form-custom">
                 <Row>
                     <Col md={6}>
-                        {/* Display fish species list */}
                         <Form.Group controlId="vrstaId" className="mb-3">
     <Form.Label>Vrsta Ribe</Form.Label>
     <AsyncTypeahead
@@ -198,7 +205,6 @@ export default function UloviPromjeni() {
                             <Form.Control type="file" name="fotografija" onChange={handleFileChange} />
                         </Form.Group>
 
-                        {/* Display cropper if image data is available */}
                         {imageData && (
                             <Cropper
                                 src={imageData}
@@ -208,7 +214,7 @@ export default function UloviPromjeni() {
                                 viewMode={1}
                                 minCropBoxWidth={50}
                                 minCropBoxHeight={50}
-                                cropBoxResizable={false}
+                                cropBoxResizable={true}
                                 background={false}
                                 responsive={true}
                                 checkOrientation={false}
@@ -217,12 +223,10 @@ export default function UloviPromjeni() {
                             />
                         )}
 
-                        {/* Display cropped image if available */}
                         {slikaZaServer && (
                             <Image src={slikaZaServer} alt="Cropped Image" className="slika" />
                         )}
 
-                        {/* Display current photo if available */}
                         {ulov.fotografija && (
                             <Image
                                 src={`${BASE_URL}${ulov.fotografija}`}

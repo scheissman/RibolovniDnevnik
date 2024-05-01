@@ -6,6 +6,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Service from "../../services/UlovService";
 import { App, RoutesNames } from "../../constants";
 import useLoading from '../../hooks/useLoading';
+import Highcharts from 'highcharts';
+import PieChart from 'highcharts-react-official';
 
 
 
@@ -38,7 +40,38 @@ export default function UloviPoKorisniku() {
             dohvatiUlove();
         }
     }
-
+    function createPieChartData(ulovi) {
+      const speciesMap = ulovi.reduce((acc, entitet) => {
+          const species = entitet.vrstaRibe;
+          if (!acc[species]) {
+              acc[species] = 0;
+          }
+          acc[species] += entitet.kolicina;
+          return acc;
+      }, {});
+  
+      const data = Object.entries(speciesMap).map(([species, count]) => ({
+          name: species,
+          y: count,
+      }));
+  
+      return data;
+  }
+  const pieChartOptions = {
+    chart: {
+        type: 'pie',
+    },
+    title: {
+        text: 'Statistika Ulova',
+    },
+    series: [
+        {
+            name: 'Vrste Riba',
+            data: createPieChartData(ulovi),
+        },
+    ],
+};
+  
     function handlePhotoClick(photoURL) {
         setModalImageURL(photoURL);
         setShowModal(true);
@@ -117,6 +150,8 @@ export default function UloviPoKorisniku() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <PieChart highcharts={Highcharts} options={pieChartOptions} />
+
         </Container>
     );
 }
