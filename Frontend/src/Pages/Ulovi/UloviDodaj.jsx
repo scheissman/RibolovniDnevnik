@@ -87,8 +87,7 @@ export default function UloviDodaj() {
       tezina: parseFloat(podaci.get("tezina")) || 0,
       duzina: parseInt(podaci.get("duzina")) || 0,
       kolicina: parseInt(podaci.get("kolicina")) || 0,
-      fotografija: slikaZaServer.replace("data:image/png;base64,", ""),
-    });
+      fotografija: slikaZaServer ? slikaZaServer.replace("data:image/png;base64,", "") : " "    });
   }
 
   function nazad(){
