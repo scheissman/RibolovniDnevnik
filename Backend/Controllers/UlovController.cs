@@ -364,7 +364,7 @@ namespace Backend.Controllers
         }
 
         [HttpPut]
-        [Route("UlovPoKorisniku/{ulovId:int}")]
+        [Route("PromjenaUlovPoKorisniku/{ulovId:int}")]
         public IActionResult UlovPromjeniSSlikom(int ulovId, UlovDtoInsertUpdate dto)
         {
             if (ulovId <= 0)
