@@ -1,38 +1,48 @@
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import React, { useState } from "react";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import useAuthorization from "../hooks/useAuthorization";
-import { AuthorizationService, register as registerService } from "../services/AuthorizationService";
 
-
-export default function Registracija() {
-  const { register } = useAuthorization();
+const RegisterPage = () => {
+  const [ime, setIme] = useState("");
+  const [prezime, setPrezime] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const url =
+      "https://scheissman-001-site1.ftempurl.com/api/v1/Auth/register";
 
-    const data = new FormData(event.target);
-    const userData = {
-      ime: data.get('ime'),
-      prezime: data.get('prezime'),
-      email: data.get('email'),
-      password: data.get('password'),
+    const data = {
+      ime: ime,
+      prezime: prezime,
+      email: email,
+      password: password,
     };
-    console.log("register function:", register);
-    console.log("userData:", userData);
 
-    register(userData)
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((error) => {
-        console.error("Registration error:", error);
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
-  }
+
+      if (response.ok) {
+        setMessage("Registration successful!");
+        navigate("/login");
+      } else {
+        const errorData = await response.json();
+        setMessage(`Registration failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    }
+  };
 
   return (
     <Container>
@@ -48,8 +58,10 @@ export default function Registracija() {
               <Form.Control
                 type="text"
                 name="ime"
+                value={ime}
                 placeholder="Unesite ime"
                 maxLength={255}
+                onChange={(e) => setIme(e.target.value)}
                 required
               />
             </Form.Group>
@@ -59,8 +71,10 @@ export default function Registracija() {
               <Form.Control
                 type="text"
                 name="prezime"
+                value={prezime}
                 placeholder="Unesite prezime"
                 maxLength={255}
+                onChange={(e) => setPrezime(e.target.value)}
                 required
               />
             </Form.Group>
@@ -70,8 +84,10 @@ export default function Registracija() {
               <Form.Control
                 type="email"
                 name="email"
+                value={email}
                 placeholder="Unesite email"
                 maxLength={255}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </Form.Group>
@@ -81,7 +97,9 @@ export default function Registracija() {
               <Form.Control
                 type="password"
                 name="password"
+                value={password}
                 placeholder="Unesite lozinku"
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </Form.Group>
@@ -94,8 +112,12 @@ export default function Registracija() {
               Registriraj se
             </Button>
           </Form>
+          {/* Display the message */}
+          {message && <p>{message}</p>}
         </Col>
       </Row>
     </Container>
   );
-}
+};
+
+export default RegisterPage;
