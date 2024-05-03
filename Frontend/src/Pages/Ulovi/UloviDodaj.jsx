@@ -6,9 +6,8 @@ import { RoutesNames } from "../../constants";
 import Akcije from "../../components/Akcije";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import useLoading from '../../hooks/useLoading';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-
+import useLoading from "../../hooks/useLoading";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 
 export default function UloviDodaj() {
   const navigate = useNavigate();
@@ -33,7 +32,11 @@ export default function UloviDodaj() {
   }, []);
 
   async function dohvatiUnose() {
+    showLoading();
+
     const odgovor = await Service.get("Ulov");
+    hideLoading();
+
     if (!odgovor.ok) {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
@@ -43,7 +46,11 @@ export default function UloviDodaj() {
   }
 
   async function dohvatiRibe() {
+    showLoading();
+
     const odgovor = await Service.get("Riba");
+    hideLoading();
+
     if (!odgovor.ok) {
       alert(Service.dohvatiPorukeAlert(odgovor.podaci));
       return;
@@ -68,9 +75,12 @@ export default function UloviDodaj() {
     setSlikaZaServer(base64Image);
   }
 
-
   async function dodaj(data) {
+    showLoading();
+
     const odgovor = await Service.dodajUlovPoKorisniku(routeParams.id, data);
+    hideLoading();
+
     if (odgovor.ok) {
       navigate(nazad());
     } else {
@@ -87,11 +97,14 @@ export default function UloviDodaj() {
       tezina: parseFloat(podaci.get("tezina")) || 0,
       duzina: parseInt(podaci.get("duzina")) || 0,
       kolicina: parseInt(podaci.get("kolicina")) || 0,
-      fotografija: slikaZaServer ? slikaZaServer.replace("data:image/png;base64,", "") : " "    });
+      fotografija: slikaZaServer
+        ? slikaZaServer.replace("data:image/png;base64,", "")
+        : " ",
+    });
   }
 
-  function nazad(){
-    return `/ulov/ulovpokorisniku/${routeParams.id}`
+  function nazad() {
+    return `/ulov/ulovpokorisniku/${routeParams.id}`;
   }
 
   return (
@@ -99,26 +112,22 @@ export default function UloviDodaj() {
       <Form onSubmit={handleSubmit} className="form-custom">
         <Row>
           <Col md={6}>
-
-          <Form.Group controlId="vrstaId" className="mb-3">
-    <Form.Label>Vrsta Ribe</Form.Label>
-    <AsyncTypeahead
-        id="riba-typeahead"
-        options={ribe}  
-        labelKey={(riba) => riba.vrsta}  
-        onSearch={(query) => {
-           
-        }}
-        onChange={(selected) => {
-            
-            if (selected.length > 0) {
-                setRibaSifra(selected[0].id);
-            }
-        }}
-        placeholder="Traži vrstu ribe..."
-        minLength={1}  
-    />
-</Form.Group>
+            <Form.Group controlId="vrstaId" className="mb-3">
+              <Form.Label>Vrsta Ribe</Form.Label>
+              <AsyncTypeahead
+                id="riba-typeahead"
+                options={ribe}
+                labelKey={(riba) => riba.vrsta}
+                onSearch={(query) => {}}
+                onChange={(selected) => {
+                  if (selected.length > 0) {
+                    setRibaSifra(selected[0].id);
+                  }
+                }}
+                placeholder="Traži vrstu ribe..."
+                minLength={1}
+              />
+            </Form.Group>
 
             <Form.Group controlId="tezina" className="mb-3">
               <Form.Label>Težina</Form.Label>
@@ -147,10 +156,7 @@ export default function UloviDodaj() {
               />
             </Form.Group>
 
-            <Akcije
-              odustani={nazad()}
-              akcija="Dodaj ulov"
-            />
+            <Akcije odustani={nazad()} akcija="Dodaj ulov" />
           </Col>
 
           <Col md={6}>
@@ -188,9 +194,6 @@ export default function UloviDodaj() {
                 className="slika"
               />
             )}
-
-
-            
           </Col>
         </Row>
       </Form>

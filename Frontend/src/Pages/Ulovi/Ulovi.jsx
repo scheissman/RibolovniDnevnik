@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import moment from "moment";
+import useLoading from '../../hooks/useLoading';
 
 import Service from "../../services/UlovService";
 import { RoutesNames } from "../../constants";
@@ -13,9 +14,15 @@ import { RoutesNames } from "../../constants";
 export default function Ulovi(){
     const [ulovi,setUlovi] = useState();
     let navigate = useNavigate(); 
+    const { showLoading, hideLoading } = useLoading();
 
     async function dohvatiUlove(){
+        showLoading();
+
         const odgovor = await Service.get('Ulov');
+        hideLoading();
+
+
         if(!odgovor.ok){
             alert(Service.dohvatiPorukeAlert(odgovor.podaci));
             return;
@@ -24,7 +31,11 @@ export default function Ulovi(){
     }
 
     async function obrisi(id) {
+        showLoading();
+
         const odgovor = await Service.obrisi('Ulov',id);
+        hideLoading();
+
         alert(Service.dohvatiPorukeAlert(odgovor.podaci));
         if (odgovor.ok){
             dohvatiUlove();

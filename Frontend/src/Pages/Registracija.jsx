@@ -34,7 +34,10 @@ const RegisterPage = () => {
 
       if (response.ok) {
         setMessage("Registration successful!");
-        navigate("/login");
+        alert("Uspješna registracija");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       } else {
         const errorData = await response.json();
         setMessage(`Registration failed: ${errorData.message}`);

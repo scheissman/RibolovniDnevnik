@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { IoIosAdd } from "react-icons/io";
-import { FaEdit, FaTrash, FaSearchengin } from "react-icons/fa";
+import { FaEdit, FaTrash, FaFish } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import moment from "moment";
-import useLoading from '../../hooks/useLoading';
+import useLoading from "../../hooks/useLoading";
 
 import Service from "../../services/UnosService";
 import { RoutesNames } from "../../constants";
@@ -80,6 +80,15 @@ export default function Unos() {
                 <td className="sredina">
                   <Button
                     variant="primary"
+                    onClick={() =>
+                      navigate(`/ulov/ulovpokorisniku/${entry.id}`)
+                    }
+                  >
+                    <FaFish size={25} />
+                  </Button>
+                  &nbsp;&nbsp;&nbsp;
+                  <Button
+                    variant="primary"
                     onClick={() => navigate(`/unos/${entry.id}`)}
                   >
                     <FaEdit size={25} />
@@ -89,14 +98,6 @@ export default function Unos() {
                     <FaTrash size={25} />
                   </Button>
                   &nbsp;&nbsp;&nbsp;
-                  <Button
-                    variant="danger"
-                    onClick={() =>
-                      navigate(`/ulov/ulovpokorisniku/${entry.id}`)
-                    }
-                  >
-                    <FaSearchengin size={25} />
-                  </Button>
                 </td>
               </tr>
             ))}
