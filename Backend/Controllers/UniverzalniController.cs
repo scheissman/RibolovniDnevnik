@@ -1,11 +1,14 @@
 ﻿using Backend.Data;
 using Backend.Mapping;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
+    [Authorize]
+
     public abstract class UniverzalniController<T, TDR, TDI>(RibolovniDnevnikContext context) : ControllerBase where T : Entitet
     {
         protected DbSet<T>? DbSet = null;
@@ -14,7 +17,6 @@ namespace Backend.Controllers
         protected abstract void KontrolaBrisanje(T entitet);
 
         protected readonly RibolovniDnevnikContext _context = context;
-
         [HttpGet]
         public IActionResult Get()
         {
