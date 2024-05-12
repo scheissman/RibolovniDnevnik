@@ -23,6 +23,6 @@ export const RoutesNames = {
 };
 
 export const App = {
-  URL: "https://scheissman-001-site1.ftempurl.com",
+  URL: "https://ribolovnidnevnik.runasp.net",
   DEV: false,
 };

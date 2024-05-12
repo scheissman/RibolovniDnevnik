@@ -17,6 +17,9 @@ export default function NavBar() {
             <Navbar expand="lg" className="bg-white">
                 <Container fluid className="p-0">
                     <Nav className="mx-right">
+                    <Nav.Link  href="/">
+                            Početna
+                            </Nav.Link>
                         {isLoggedIn ? (
                             <Nav.Link onClick={logout}>Logout</Nav.Link>
                         ) : (
@@ -24,9 +27,7 @@ export default function NavBar() {
                                 Login
                             </Nav.Link>
                         )}
-                        <Nav.Link target="_blank" href="https://scheissman-001-site1.ftempurl.com/swagger/index.html">
-                            Api
-                        </Nav.Link>
+                      
                         {/* Conditionally render the "Ribolovni Unos" link based on isLoggedIn */}
                         {isLoggedIn && (
                             <Nav.Link onClick={() => navigate(RoutesNames.UNOS_PREGLED)}>
