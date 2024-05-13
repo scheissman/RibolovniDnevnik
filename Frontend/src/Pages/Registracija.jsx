@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url =
-      "https://scheissman-001-site1.ftempurl.com/api/v1/Auth/register";
+      "https://ribolovnidnevnik.runasp.net/api/v1/Auth/register";
 
     const data = {
       ime: ime,
