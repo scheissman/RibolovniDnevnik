@@ -1,10 +1,6 @@
 # RibolovniDnevnik
 
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/scheissman/RibolovniDnevnik/main.yml?branch=main)
-![License](https://img.shields.io/github/license/scheissman/RibolovniDnevnik)
-![Version](https://img.shields.io/github/v/release/scheissman/RibolovniDnevnik)
-
 
 ## Overview
 RibolovniDnevnik is a fishing log application developed as a final project for the WP3 course. 
