@@ -20,7 +20,7 @@ const FishingReminderWidget = () => {
   }, []);
 
   return (
-    <div style={{ width: "150px" }}>
+    <div style={{ width: "100%", maxWidth: "360px" }}>
       <div id="frmdr"></div>
       <a href="https://www.fishingreminder.com" title="Fishing Calendar"></a>
     </div>

@@ -14,12 +14,12 @@ export default function NavBar() {
     return (
         <>
             <GornjiNav />
-            <Navbar expand="lg" className="bg-white">
+            <Navbar expand="lg" className="bg-white shadow-sm sticky-top">
                 <Container fluid className="p-0">
                     <Nav className="mx-right">
-                    <Nav.Link  href="/">
+                        <Nav.Link onClick={() => navigate(RoutesNames.HOME)}>
                             Početna
-                            </Nav.Link>
+                        </Nav.Link>
                         {isLoggedIn ? (
                             <Nav.Link onClick={logout}>Logout</Nav.Link>
                         ) : (
@@ -27,8 +27,6 @@ export default function NavBar() {
                                 Login
                             </Nav.Link>
                         )}
-                      
-                        {/* Conditionally render the "Ribolovni Unos" link based on isLoggedIn */}
                         {isLoggedIn && (
                             <Nav.Link onClick={() => navigate(RoutesNames.UNOS_PREGLED)}>
                                 Ribolovni Unos

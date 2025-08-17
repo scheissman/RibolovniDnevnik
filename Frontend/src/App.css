@@ -1,6 +1,22 @@
+:root {
+  --brand-primary: #1986aa;
+  --brand-primary-600: #1a7592;
+  --brand-surface: #f7fafc;
+  --bs-primary: #1986aa;
+  --bs-link-color: #1986aa;
+  --bs-link-hover-color: #156e88;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+  background-color: var(--brand-surface);
+  color: #1f2937;
+}
+
 .gornji_logo {
-  background-color: #1986aa;
-  height: 130px;
+  background: linear-gradient(90deg, #1986aa, #1ba3ca);
+  height: 110px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .donji_logo {
@@ -10,8 +26,9 @@
 
 .kontejner {
   height: auto;
-  max-width: 600px;
+  max-width: 1000px;
   margin: auto;
+  padding: 24px 16px;
 }
 .slika{
   max-width: 250px;
@@ -24,7 +41,7 @@
   width: 100%;
   background-color: #1986aa;
   color: white;
-  padding: 20px;
+  padding: 10px;
 }
 
 .siroko {
@@ -37,12 +54,26 @@
 }
 
 .loading-spinner-overlay {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,0.2);
-  z-index: 1000;
+  z-index: 1100;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card.shadow-sm {
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
