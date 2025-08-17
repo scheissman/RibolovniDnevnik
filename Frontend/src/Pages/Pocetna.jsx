@@ -1,6 +1,5 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import DonjiNav from "../components/donjiNav";
 import WeatherWidget from "../components/WeatherWidget";
 import MyComponent from "../components/tekst";
 import FishingReminderWidget from "../components/FishingReminderWidget";

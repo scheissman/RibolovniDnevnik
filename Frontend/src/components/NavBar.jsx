@@ -17,18 +17,21 @@ export default function NavBar() {
             <Navbar expand="lg" className="bg-white">
                 <Container fluid className="p-0">
                     <Nav className="mx-right">
-                    <Nav.Link  href="/">
+                        <Nav.Link onClick={() => navigate(RoutesNames.HOME)}>
                             Početna
-                            </Nav.Link>
+                        </Nav.Link>
                         {isLoggedIn ? (
                             <Nav.Link onClick={logout}>Logout</Nav.Link>
                         ) : (
-                            <Nav.Link onClick={() => navigate(RoutesNames.LOGIN)}>
-                                Login
-                            </Nav.Link>
+                            <>
+                                <Nav.Link onClick={() => navigate(RoutesNames.LOGIN)}>
+                                    Login
+                                </Nav.Link>
+                                <Nav.Link onClick={() => navigate(RoutesNames.REGISTRACIJA)}>
+                                    Register
+                                </Nav.Link>
+                            </>
                         )}
-                      
-                        {/* Conditionally render the "Ribolovni Unos" link based on isLoggedIn */}
                         {isLoggedIn && (
                             <Nav.Link onClick={() => navigate(RoutesNames.UNOS_PREGLED)}>
                                 Ribolovni Unos

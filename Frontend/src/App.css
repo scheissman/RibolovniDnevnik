@@ -1,3 +1,12 @@
+:root {
+  --brand-primary: #1986aa;
+  --brand-primary-600: #1a7592;
+  --brand-surface: #f7fafc;
+  --bs-primary: #1986aa;
+  --bs-link-color: #1986aa;
+  --bs-link-hover-color: #156e88;
+}
+
 .gornji_logo {
   background-color: #1986aa;
   height: 130px;
@@ -37,12 +46,26 @@
 }
 
 .loading-spinner-overlay {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,0.2);
-  z-index: 1000;
+  z-index: 1100;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card.shadow-sm {
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
