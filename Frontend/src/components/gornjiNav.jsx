@@ -13,7 +13,7 @@ function GornjiNav() {
               src={logo}
               alt="Logo"
               width="auto"
-              height="100"
+              height="120"
               className="d-inline-block align-top"
             />
           </Navbar.Brand>

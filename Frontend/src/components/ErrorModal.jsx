@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 export default function ErrorModal({ show, onHide, errors }) {
     console.log("Errors in modal: ", errors);
     return (
-        <Modal show={show} onHide={onHide} centered>
-            <Modal.Header closeButton style={{ backgroundColor: '#1986aa', color: 'white' }}>
+        <Modal show={show} onHide={onHide}>
+            <Modal.Header closeButton>
                 <Modal.Title>Oops</Modal.Title>
             </Modal.Header>
             <Modal.Body>

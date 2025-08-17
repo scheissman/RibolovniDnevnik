@@ -14,7 +14,7 @@ export default function NavBar() {
     return (
         <>
             <GornjiNav />
-            <Navbar expand="lg" className="bg-white shadow-sm sticky-top">
+            <Navbar expand="lg" className="bg-white">
                 <Container fluid className="p-0">
                     <Nav className="mx-right">
                         <Nav.Link onClick={() => navigate(RoutesNames.HOME)}>
@@ -23,9 +23,14 @@ export default function NavBar() {
                         {isLoggedIn ? (
                             <Nav.Link onClick={logout}>Logout</Nav.Link>
                         ) : (
-                            <Nav.Link onClick={() => navigate(RoutesNames.LOGIN)}>
-                                Login
-                            </Nav.Link>
+                            <>
+                                <Nav.Link onClick={() => navigate(RoutesNames.LOGIN)}>
+                                    Login
+                                </Nav.Link>
+                                <Nav.Link onClick={() => navigate(RoutesNames.REGISTRACIJA)}>
+                                    Register
+                                </Nav.Link>
+                            </>
                         )}
                         {isLoggedIn && (
                             <Nav.Link onClick={() => navigate(RoutesNames.UNOS_PREGLED)}>
